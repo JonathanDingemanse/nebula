@@ -21,7 +21,7 @@
 #include <mutex>
 
 // Main typedefs
-using geometry_t = nbl::geometry::octree<false>;
+using geometry_t = nbl::geometry::voxels<false>;
 using material_t = material<scatter_physics<false>>;
 
 using driver = nbl::drivers::simple_cpu_driver<
@@ -88,18 +88,19 @@ int main(int argc, char** argv)
 	{
 		std::clog << "Error: could not load triangles!\n";
 		p.print_usage(std::clog);
-		return 1;
+		//return 1; dont exit if there are no triangles
 	}
 	// Sanity check with number of materials
 	{
-		int max_material = -1;
+		/*int max_material = -1;
 		for (triangle const & tri : triangles)
 		{
 			if (tri.material_in > max_material)
 				max_material = tri.material_in;
 			if (tri.material_out > max_material)
 				max_material = tri.material_out;
-		}
+		}*/
+		int max_material = 1; // in the first version of the dynamic version there is only one material 
 
 		if (max_material > int(pos_flags.size())-3)
 		{

@@ -1,10 +1,10 @@
 namespace nbl { namespace geometry {
 
 template<bool gpu_flag>
-CPU trilist<gpu_flag> trilist<gpu_flag>::create(std::vector<triangle> const & triangles)
+CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & triangles)
 {
 	// TODO: error message
-	if (triangles.empty())
+	/*if (triangles.empty())
 		throw std::runtime_error("No triangles provided!");
 
 	vec3 AABB_min = triangles[0].AABB_min();
@@ -31,18 +31,20 @@ CPU trilist<gpu_flag> trilist<gpu_flag>::create(std::vector<triangle> const & tr
 
 	AABB_min -= vec3{ 1, 1, 1 };
 	AABB_max += vec3{ 1, 1, 1 };
+	*/
+	
 
-	return detail::trilist_factory<gpu_flag>::create(triangles, AABB_min, AABB_max);
+	return detail::voxels_factory<gpu_flag>::create(triangles, AABB_min, AABB_max);
 }
 
 template<bool gpu_flag>
-CPU void trilist<gpu_flag>::destroy(trilist<gpu_flag> & geometry)
+CPU void voxels<gpu_flag>::destroy(voxels<gpu_flag> & geometry)
 {
-	detail::trilist_factory<gpu_flag>::destroy(geometry);
+	detail::voxels_factory<gpu_flag>::destroy(geometry);
 }
 
 template<bool gpu_flag>
-PHYSICS bool trilist<gpu_flag>::in_domain(vec3 pos)
+PHYSICS bool voxels<gpu_flag>::in_domain(vec3 pos)
 {
 	return ((pos.x > _AABB_min.x) && (pos.x < _AABB_max.x)
 		&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
@@ -50,7 +52,7 @@ PHYSICS bool trilist<gpu_flag>::in_domain(vec3 pos)
 }
 
 template<bool gpu_flag>
-PHYSICS intersect_event trilist<gpu_flag>::propagate(vec3 start, vec3 direction, real distance,
+PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, real distance,
 	triangle const * ignore_triangle, int ignore_material) const
 {
 	intersect_event evt { distance, nullptr };
@@ -85,24 +87,24 @@ PHYSICS intersect_event trilist<gpu_flag>::propagate(vec3 start, vec3 direction,
 }
 
 template<bool gpu_flag>
-PHYSICS real trilist<gpu_flag>::get_max_extent() const
+PHYSICS real voxels<gpu_flag>::get_max_extent() const
 {
 	return _max_extent;
 }
 
 template<bool gpu_flag>
-inline PHYSICS vec3 trilist<gpu_flag>::AABB_min() const
+inline PHYSICS vec3 voxels<gpu_flag>::AABB_min() const
 {
 	return _AABB_min;
 }
 template<bool gpu_flag>
-inline PHYSICS vec3 trilist<gpu_flag>::AABB_max() const
+inline PHYSICS vec3 voxels<gpu_flag>::AABB_max() const
 {
 	return _AABB_max;
 }
 
 template<bool gpu_flag>
-CPU void trilist<gpu_flag>::set_AABB(vec3 min, vec3 max)
+CPU void voxels<gpu_flag>::set_AABB(vec3 min, vec3 max)
 {
 	_AABB_min = min;
 	_AABB_max = max;
@@ -115,14 +117,14 @@ CPU void trilist<gpu_flag>::set_AABB(vec3 min, vec3 max)
 namespace detail
 {
 	template<>
-	struct trilist_factory<false>
+	struct voxels_factory<false>
 	{
-		inline static CPU trilist<false> create(std::vector<triangle> triangles, vec3 AABB_min, vec3 AABB_max)
+		inline static CPU voxels<false> create(std::vector<triangle> triangles, vec3 AABB_min, vec3 AABB_max)
 		{
-			using trilist_t = trilist<false>;
-			using triangle_index_t = trilist_t::triangle_index_t;
+			using voxels_t = voxels<false>;
+			using triangle_index_t = voxels_t::triangle_index_t;
 
-			trilist_t geometry;
+			voxels_t geometry;
 
 			if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
 				throw std::runtime_error("Too many triangles in geometry");
@@ -139,7 +141,7 @@ namespace detail
 			return geometry;
 		}
 
-		inline static CPU void free(trilist<false> & geometry)
+		inline static CPU void free(voxels<false> & geometry)
 		{
 			::free(geometry._triangles);
 
@@ -150,14 +152,14 @@ namespace detail
 
 #if CUDA_COMPILER_AVAILABLE
 	template<>
-	struct trilist_factory<true>
+	struct voxels_factory<true>
 	{
-		inline static CPU trilist<true> create(std::vector<triangle> triangles, vec3 AABB_min, vec3 AABB_max)
+		inline static CPU voxels<true> create(std::vector<triangle> triangles, vec3 AABB_min, vec3 AABB_max)
 		{
-			using trilist_t = trilist<true>;
-			using triangle_index_t = trilist_t::triangle_index_t;
+			using voxels_t = voxels<true>;
+			using triangle_index_t = voxels_t::triangle_index_t;
 
-			trilist_t geometry;
+			voxels_t geometry;
 
 			if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
 				throw std::runtime_error("Too many triangles in geometry");
@@ -177,7 +179,7 @@ namespace detail
 			return geometry;
 		}
 
-		inline static CPU void free(trilist<true> & geometry)
+		inline static CPU void free(voxels<true> & geometry)
 		{
 			cudaFree(geometry._triangles);
 

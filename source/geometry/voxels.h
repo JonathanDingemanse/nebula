@@ -1,5 +1,5 @@
-#ifndef __GEOMETRY_TRILIST_H_
-#define __GEOMETRY_TRILIST_H_
+#ifndef __GEOMETRY_VOXELS_H_
+#define __GEOMETRY_VOXELS_H_
 
 #include "../core/triangle.h"
 #include "../core/events.h"
@@ -12,7 +12,7 @@ namespace detail
 	 * \brief Responsible for managing the memory on the CPU or GPU device.
 	 */
 	template<bool gpu_flag>
-	struct trilist_factory;
+	struct voxels_factory;
 }
 
 /**
@@ -28,7 +28,7 @@ namespace detail
  * there is no constructor or destructor to be used.
  */
 template<bool gpu_flag>
-class trilist
+class voxels
 {
 public:
 	using triangle_index_t = uint32_t; ///< Type for indexing the triangles
@@ -38,11 +38,11 @@ public:
 	 *
 	 * \param triangles List of triangles to be used in the simulation.
 	 */
-	static CPU trilist create(std::vector<triangle> const & triangles);
+	static CPU voxels create(std::vector<triangle> const & triangles);
 	/**
 	 * \brief Destroy the triangle list, deallocating the data.
 	 */
-	static CPU void destroy(trilist & geometry);
+	static CPU void destroy(voxels & geometry);
 
 	/**
 	 * \brief Check whether a certain position is part of the simulation domain.
@@ -96,11 +96,11 @@ private:
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
 
-	friend struct detail::trilist_factory<gpu_flag>;
+	friend struct detail::voxels_factory<gpu_flag>;
 };
 
 }} // namespace nbl::geometry
 
-#include "trilist.inl"
+#include "voxels.inl"
 
-#endif // __GEOMETRY_TRILIST_H_
+#endif // __GEOMETRY_VOXELS_H_
