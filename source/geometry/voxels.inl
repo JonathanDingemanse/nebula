@@ -3,6 +3,24 @@ namespace nbl { namespace geometry {
 template<bool gpu_flag>
 CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & triangles)
 {
+
+	const float VOXEL_SIZE = 0.3 // voxel size in nanometers (0.27 nm is appr. one atom of Si)
+
+	const int SIZE_X = 201 // horizontal size in the x direction in voxels
+	const int SIZE_Y = 201 // horizontal size in the y direction in voxels
+	const int SIZE_Z = 700 // vertical size in voxels
+
+	const int SAMPLE_HEIGHT = 300 // height of the sample (length between the sample and the top of the simulation domain) in voxels
+
+	// Hier moet ergens een grid gemaakt worden, 
+		// een voor het materiaal, 
+		// een voor the timestamp van de electronen, 
+		// een voor de energy van het deposition electron,
+		// en een voor de dz van dat electron
+
+	const vec3 AABB_min = vec3{ 0, 0, 0 };
+	const vec3 AABB_max = vec3{ SIZE_X, SIZE_Y, SIZE_Z };
+
 	// TODO: error message
 	/*if (triangles.empty())
 		throw std::runtime_error("No triangles provided!");
@@ -32,7 +50,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	AABB_min -= vec3{ 1, 1, 1 };
 	AABB_max += vec3{ 1, 1, 1 };
 	*/
-	
+
 
 	return detail::voxels_factory<gpu_flag>::create(triangles, AABB_min, AABB_max);
 }

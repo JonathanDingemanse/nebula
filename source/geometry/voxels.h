@@ -3,6 +3,8 @@
 
 #include "../core/triangle.h"
 #include "../core/events.h"
+#include "../config/data_types.h"
+
 
 namespace nbl { namespace geometry {
 
