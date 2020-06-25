@@ -97,7 +97,7 @@ private:
 	//std::vector<int> tag_grid;
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
-
+	real voxel_size;
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
