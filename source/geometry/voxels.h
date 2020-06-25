@@ -3,7 +3,7 @@
 
 #include "../core/triangle.h"
 #include "../core/events.h"
-#include "../config/data_types.h"
+
 
 
 namespace nbl { namespace geometry {
@@ -92,8 +92,10 @@ public:
 private:
 	CPU void set_AABB(vec3 min, vec3 max);
 
-	triangle* _triangles = nullptr;
-	triangle_index_t _N  = 0;
+	std::vector<int> mat_grid; // a voxel grid with standard material codes 
+	//std::vector<int> tag_grid;
+	//std::vector<float> e_grid;
+	//std::vector<float> dz_grid;
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
