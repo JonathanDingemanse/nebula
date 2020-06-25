@@ -3,7 +3,7 @@ namespace nbl { namespace geometry {
 template<bool gpu_flag>
 CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & triangles)
 {
-	const float VOXEL_SIZE = 0.3; // voxel size in nanometers (0.27 nm is appr. one atom of Si)
+	const real VOXEL_SIZE = 0.3; // voxel size in nanometers (0.27 nm is appr. one atom of Si)
 
 	const int SIZE_X = 201; // horizontal size in the x direction in voxels
 	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
@@ -84,14 +84,21 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 {
 	intersect_event evt { distance, nullptr };
 
-	using dx = direction.x; // create aliases for the direction elements
-	using dy = direction.y;
-	using dz = direction.z;
+	k = (int) (start.x / voxel_size);
+	l = (int) (start.y / voxel_size);
+	m = (int) (start.z / voxel_size);
+	
+	start_mat = mat_grid[k + l*SIZE_X + m*SIZE_X*SIZE_Y];
 
+	real dx = direction.x / voxel_size; // create vars for the direction elements
+	real dy = direction.y / voxel_size;
+	real dz = direction.z / voxel_size;
+
+	vec3 dr = {dx, dy, dz};
 	vec3 delta_S = {0, 0, 0};
 
-	float delta_s_min = 100;
-
+	real delta_s_min = distance / voxel_size;
+ 
 	if(dx > 0){
 		delta_x = std::ceil(dx) - dx;
 	}
@@ -100,6 +107,98 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	delta_S.x = delta_x/dx;
 	
+	if(delta_S_min > delta_S.x){
+		delta_S_min = delta_S.x;
+	}
+
+	if(dy > 0){
+		delta_y = std::ceil(dy) - dy;
+	}
+	else{
+		delta_y = dy - std::floor(dy);
+	}
+	delta_S.y = delta_y/dy;
+
+	if(dz > 0){
+		delta_z = std::ceil(dz) - dz;
+	}
+	else{
+		delta_z = dz - std::floor(dz);
+	}
+	delta_S.z = delta_z/dz;
+	
+	while(distance > delta_s_min){
+
+		for(int i ; i < 3 : i++){
+
+			real delta_S_i = delta_S[i]
+
+			if(delta_S_i < delta_s_min){
+				delta_s_min = delta_S_i;
+
+				vec3 new_pos = start + delta_s_min*dr;
+
+				int k;
+				int l;
+				int m;
+
+				switch (i)
+				{
+				case 0: // intersection with x-plane
+					k = (int) (new_pos.x + 0.1);
+					l = (int) (new_pos.y);
+					m = (int) (new_pos.z);
+					break;
+				
+				case 1: // intersection with y-plane
+					k = (int) (new_pos.x);
+					l = (int) (new_pos.y + 0.1);
+					m = (int) (new_pos.z);
+					break;
+
+				default: // intersection with z-plane
+					k = (int) (new_pos.x);
+					l = (int) (new_pos.y);
+					m = (int) (new_pos.z + 0.1);
+					break;
+				}
+
+				if(mat_grid[ k + m*SIZE_X + l*SIZE_X*SIZE_Y] != start_mat){
+					evt.isect_distance = delta_s_min * voxel_size;
+					switch (i)
+					{
+					case 0:
+						if(dx > 0){
+							evt.isect_triangle = 1;
+						}
+						else{
+							evt.isect_triangle = 2;
+						}
+						break;
+
+					case 1:
+						if(dy > 0){
+							evt.isect_triangle = 3;
+						}
+						else{
+							evt.isect_triangle = 4;
+						}
+						break;	
+					
+					default:
+						if(dz > 0){
+							evt.isect_triangle = 5;
+						}
+						else{
+							evt.isect_triangle = 6;
+						}
+						break;
+					}
+				}
+				
+			}
+		}
+	}
 
 	/*for (triangle_index_t i = 0; i < _N; ++i)
 	{
