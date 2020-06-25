@@ -92,10 +92,12 @@ public:
 private:
 	CPU void set_AABB(vec3 min, vec3 max);
 
-	std::vector<int> mat_grid; // a voxel grid with standard material codes 
+	// These vectors are implicit 3D vectors, that represent a voxel grid
+	std::vector<int> mat_grid; // a voxel grid with nebula material codes. 
 	//std::vector<int> tag_grid;
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
+
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
