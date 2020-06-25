@@ -3,23 +3,33 @@ namespace nbl { namespace geometry {
 template<bool gpu_flag>
 CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & triangles)
 {
+	const float VOXEL_SIZE = 0.3; // voxel size in nanometers (0.27 nm is appr. one atom of Si)
 
-	const float VOXEL_SIZE = 0.3 // voxel size in nanometers (0.27 nm is appr. one atom of Si)
+	const int SIZE_X = 201; // horizontal size in the x direction in voxels
+	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
+	const int SIZE_Z = 700; // vertical size in voxels
 
-	const int SIZE_X = 201 // horizontal size in the x direction in voxels
-	const int SIZE_Y = 201 // horizontal size in the y direction in voxels
-	const int SIZE_Z = 700 // vertical size in voxels
-
-	const int SAMPLE_HEIGHT = 300 // height of the sample (length between the sample and the top of the simulation domain) in voxels
+	const int SAMPLE_HEIGHT = 300; // height of the sample (length between the sample and the top of the simulation domain) in voxels
 
 	// Hier moet ergens een grid gemaakt worden, 
 		// een voor het materiaal, 
 		// een voor the timestamp van de electronen, 
 		// een voor de energy van het deposition electron,
 		// en een voor de dz van dat electron
+	
+	mat_grid.reshape(SIZE_X*SIZE_Y*SIZE_Z, 0) // set the shape 
 
-	const vec3 AABB_min = vec3{ 0, 0, 0 };
-	const vec3 AABB_max = vec3{ SIZE_X, SIZE_Y, SIZE_Z };
+	// set the initial geometry
+	for(i = 0, i < SIZE_X, i++){ 
+		for(j = 0, j < SIZE_Y, j++){
+			for(k = 0, k < SAMPLE_HEIGHT, k++){
+				mat_grid[i + j*SIZE_X + k*SIZE_X*SIZE_Y] = -123
+			}
+		}
+	}
+
+	AABB_min = vec3{ 0, 0, 0 };
+	AABB_max = vec3{ SIZE_X*VOXEL_SIZE, SIZE_Y*VOXEL_SIZE, SIZE_Z*VOXEL_SIZE };
 
 	// TODO: error message
 	/*if (triangles.empty())
@@ -51,7 +61,6 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	AABB_max += vec3{ 1, 1, 1 };
 	*/
 
-
 	return detail::voxels_factory<gpu_flag>::create(triangles, AABB_min, AABB_max);
 }
 
@@ -74,7 +83,25 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	triangle const * ignore_triangle, int ignore_material) const
 {
 	intersect_event evt { distance, nullptr };
-	for (triangle_index_t i = 0; i < _N; ++i)
+
+	using dx = direction.x; // create aliases for the direction elements
+	using dy = direction.y;
+	using dz = direction.z;
+
+	vec3 delta_S = {0, 0, 0};
+
+	float delta_s_min = 100;
+
+	if(dx > 0){
+		delta_x = std::ceil(dx) - dx;
+	}
+	else{
+		delta_x = dx - std::floor(dx);
+	}
+	delta_S.x = delta_x/dx;
+	
+
+	/*for (triangle_index_t i = 0; i < _N; ++i)
 	{
 		if (_triangles + i == ignore_triangle)
 			continue;
@@ -100,7 +127,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			evt.isect_distance = t;
 			evt.isect_triangle = _triangles + i;
 		}
-	}
+	}*/
 	return evt;
 }
 
@@ -144,7 +171,7 @@ namespace detail
 
 			voxels_t geometry;
 
-			if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
+			/*if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
 				throw std::runtime_error("Too many triangles in geometry");
 			geometry._N = static_cast<triangle_index_t>(triangles.size());
 
@@ -152,7 +179,7 @@ namespace detail
 			for (triangle_index_t i = 0; i < triangles.size(); ++i)
 			{
 				geometry._triangles[i] = triangles[i];
-			}
+			}*/
 
 			geometry.set_AABB(AABB_min, AABB_max);
 
