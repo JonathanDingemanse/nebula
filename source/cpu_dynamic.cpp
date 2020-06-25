@@ -81,15 +81,17 @@ int main(int argc, char** argv)
 	// Load geometry
 	std::clog << "Loading geometry..." << std::endl;
 	timer.start();
-	std::vector<triangle> triangles = nbl::load_tri_file(pos_flags[0]);
+	// std::vector<triangle> triangles = nbl::load_tri_file(pos_flags[0]);
+	std::vector<triangle> triangles; // ???????
 	timer.stop("Loading triangles");
 
-	if (triangles.empty())
+	/*if (triangles.empty())
 	{
 		std::clog << "Error: could not load triangles!\n";
 		p.print_usage(std::clog);
-		//return 1; dont exit if there are no triangles
-	}
+		return 1; 
+	}*/ 
+
 	// Sanity check with number of materials
 	{
 		/*int max_material = -1;
@@ -162,7 +164,7 @@ int main(int argc, char** argv)
 		<< "Loaded " << materials.size() << " materials.\n\n" << std::flush;
 
 	// Prepare output file
-	output_stream out_file("stdout");
+	output_stream out_file("output.ele"); // "stdout" for terminal dump
 
 	// Simulation loop
 	auto sim_loop = [&pool, &out_file, &pixels,
