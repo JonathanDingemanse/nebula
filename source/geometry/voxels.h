@@ -36,6 +36,14 @@ public:
 	using triangle_index_t = uint32_t; ///< Type for indexing the triangles
 
 	/**
+	 * \brief Constructor of the voxels class
+	 *
+	 * \param voxel_size Size of a side of the voxels in nanometer
+	 * \param shape Shape of the simulation domain in voxels, as vec3 {size_x, size_y, size_z}
+	 * \param initial_geometry The initial geometry of the sample, as a std::vector<int> of length size_x*size_y*size_z
+	 */
+	voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry);
+	/**
 	 * \brief Allocate memory for the triangles on the correct device.
 	 *
 	 * \param triangles List of triangles to be used in the simulation.
