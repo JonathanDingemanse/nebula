@@ -17,7 +17,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 
 	_mat_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
 
-		if (initial_geometry.size() != shape.x * shape.y * shape.z)
+		if (initial_geometry.size() != _size_x * _size_y * _size_z)
 		{
 			throw std::invalid_argument("initial geometry of wrong shape");
 		}
