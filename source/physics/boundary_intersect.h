@@ -49,12 +49,12 @@ struct boundary_intersect
 
 		// Extract data from triangle pointer (code from luc)
 		uint64_t isect_id = reinterpret_cast<uint64_t>(particle_mgr.get_last_triangle(particle_idx)); 
-		int material_idx = reinterpret_cast<int32_t*>(&isect_id)[0];
+		material_index_t material_idx_out = reinterpret_cast<int32_t*>(&isect_id)[0];
 		int voxel_side = reinterpret_cast<int32_t*>(&isect_id)[1];
 
 		// Get particle direction, normal of the intersected triangle
 		auto normalised_dir = normalised(this_particle.dir);
-		const vec3 last_triangle_normal;
+		vec3 last_triangle_normal;
 
 			// determine the normal of the voxel side using its number in range (1..6)
 		switch (voxel_side) 
