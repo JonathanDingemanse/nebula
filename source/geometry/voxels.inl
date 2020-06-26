@@ -5,13 +5,17 @@ template<bool gpu_flag>
 inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry)
 {
 	_voxel_size = voxel_size;
-		_AABB_min = vec3{ 0, 0, 0 };
+	_AABB_min = vec3{ 0, 0, 0 };
 	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
 
-	const vec3 m = AABB_max - AABB_min;
+	_size_x = (int)shape.x;
+	_size_y = (int)shape.y;;
+	_size_z = (int)shape.z;
+	
+	const vec3 m = _AABB_max - _AABB_min;
 	_max_extent = magnitude(m);
 
-	_mat_grid.reshape(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
+	_mat_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
 
 		if (initial_geometry.size() != shape.x * shape.y * shape.z)
 		{
@@ -31,7 +35,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	const int SAMPLE_HEIGHT = 300; // height of the sample (length between the sample and the top of the simulation domain) in voxels
 
-	vec3 shape = {SIZE_X, SIZE_Y, SIZE_Z}
+	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
 	// Hier moet ergens een grid gemaakt worden, 
 		// een voor het materiaal, 
@@ -47,7 +51,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			for (int k = 0; k < SAMPLE_HEIGHT; k++) {
-				ini_geom[i + j * SIZE_X + k * SIZE_X * SIZE_Y] = -123;
+				ini_geom.at( i + j * SIZE_X + k * SIZE_X * SIZE_Y) = -123;
 			}
 		}
 	}
@@ -109,21 +113,24 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 {
 	intersect_event evt { distance, nullptr };
 
-	k = (int) (start.x / voxel_size);
-	l = (int) (start.y / voxel_size);
-	m = (int) (start.z / voxel_size);
 	
-	start_mat = mat_grid[k + l*SIZE_X + m*SIZE_X*SIZE_Y];
 
-	real dx = direction.x / voxel_size; // create vars for the direction elements
-	real dy = direction.y / voxel_size;
-	real dz = direction.z / voxel_size;
+	int k = (int) (start.x / _voxel_size);
+	int l = (int) (start.y / _voxel_size);
+	int m = (int) (start.z / _voxel_size);
+	
+	int start_mat = _mat_grid.at(k + l*_size_x + m*_size_x*_size_y);
+
+	real dx = direction.x / _voxel_size; // create vars for the direction elements
+	real dy = direction.y / _voxel_size;
+	real dz = direction.z / _voxel_size;
 
 	vec3 dr = {dx, dy, dz};
 	vec3 delta_S = {0, 0, 0};
 
-	real delta_s_min = distance / voxel_size;
- 
+	real delta_s_min = distance / _voxel_size;
+
+	real delta_x;
 	if(dx > 0){
 		delta_x = std::ceil(dx) - dx;
 	}
@@ -132,10 +139,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	delta_S.x = delta_x/dx;
 	
-	if(delta_S_min > delta_S.x){
-		delta_S_min = delta_S.x;
+	if(delta_s_min > delta_S.x){
+		delta_s_min = delta_S.x;
 	}
 
+	real delta_y;
 	if(dy > 0){
 		delta_y = std::ceil(dy) - dy;
 	}
@@ -144,6 +152,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	delta_S.y = delta_y/dy;
 
+	real delta_z;
 	if(dz > 0){
 		delta_z = std::ceil(dz) - dz;
 	}
@@ -156,7 +165,18 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		for (int i; i < 3; i++) {
 
-			real delta_S_i = delta_S[i];
+			real delta_S_i;
+			switch (i)
+			{
+			case 0:
+				delta_S_i = delta_S.x;
+				break;
+			case 1:
+				delta_S_i = delta_S.y;
+				break;
+			default:
+				delta_S_i = delta_S.z;
+			}
 
 			if(delta_S_i < delta_s_min){
 				delta_s_min = delta_S_i;
@@ -188,8 +208,8 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 					break;
 				}
 
-				if(mat_grid[ k + m*SIZE_X + l*SIZE_X*SIZE_Y] != start_mat){
-					evt.isect_distance = delta_s_min * voxel_size;
+				if(_mat_grid.at( k + m*_size_x + l*_size_x*_size_y) != start_mat){
+					evt.isect_distance = delta_s_min * _voxel_size;
 
 					int	voxel_side;
 					switch (i)
@@ -224,7 +244,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 					uint64_t isect_id;
 
-					reinterpret_cast<int32_t*>(&isect_id)[0] = mat_grid[k + m * SIZE_X + l * SIZE_X * SIZE_Y];
+					reinterpret_cast<int32_t*>(&isect_id)[0] = _mat_grid.at(k + m * _size_x + l * _size_x * _size_y);
 
 					reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
 
