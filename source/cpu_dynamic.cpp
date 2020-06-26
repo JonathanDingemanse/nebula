@@ -12,6 +12,7 @@
 
 #include "geometry/trilist.h"
 #include "geometry/octree.h"
+#include "geometry/voxels.h"
 
 #include <iostream>
 #include <iomanip>
@@ -19,6 +20,8 @@
 #include <numeric>
 #include <thread>
 #include <mutex>
+
+
 
 // Main typedefs
 using geometry_t = nbl::geometry::voxels<false>;
