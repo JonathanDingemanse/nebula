@@ -1,4 +1,24 @@
+#include "voxels.h"
 namespace nbl { namespace geometry {
+
+template<bool gpu_flag>
+inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry)
+{
+	_voxel_size = voxel_size;
+		_AABB_min = vec3{ 0, 0, 0 };
+	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
+
+	const vec3 m = AABB_max - AABB_min;
+	_max_extent = magnitude(m);
+
+	_mat_grid.reshape(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
+
+		if (initial_geometry.size() != shape.x * shape.y * shape.z)
+		{
+			throw std::invalid_argument("initial geometry of wrong shape");
+		}
+	_mat_grid = initial_geometry;
+}
 
 template<bool gpu_flag>
 CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & triangles)
@@ -17,19 +37,18 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 		// een voor de energy van het deposition electron,
 		// en een voor de dz van dat electron
 	
-	mat_grid.reshape(SIZE_X*SIZE_Y*SIZE_Z, 0) // set the shape 
+	 // set the shape 
 
 	// set the initial geometry
-	for(i = 0, i < SIZE_X, i++){ 
-		for(j = 0, j < SIZE_Y, j++){
-			for(k = 0, k < SAMPLE_HEIGHT, k++){
-				mat_grid[i + j*SIZE_X + k*SIZE_X*SIZE_Y] = -123
+	for (int i = 0; i < SIZE_X; i++) {
+		for (j = 0; j < SIZE_Y; j++) {
+			for (k = 0; k < SAMPLE_HEIGHT; k++) {
+				mat_grid[i + j * SIZE_X + k * SIZE_X * SIZE_Y] = -123;
 			}
 		}
 	}
 
-	AABB_min = vec3{ 0, 0, 0 };
-	AABB_max = vec3{ SIZE_X*VOXEL_SIZE, SIZE_Y*VOXEL_SIZE, SIZE_Z*VOXEL_SIZE };
+	
 
 	// TODO: error message
 	/*if (triangles.empty())
@@ -129,9 +148,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	
 	while(distance > delta_s_min){
 
-		for(int i ; i < 3 : i++){
+		for (int i; i < 3; i++) {
 
-			real delta_S_i = delta_S[i]
+			real delta_S_i = delta_S[i];
 
 			if(delta_S_i < delta_s_min){
 				delta_s_min = delta_S_i;
@@ -165,35 +184,47 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 				if(mat_grid[ k + m*SIZE_X + l*SIZE_X*SIZE_Y] != start_mat){
 					evt.isect_distance = delta_s_min * voxel_size;
+
+					int	voxel_side;
 					switch (i)
 					{
 					case 0:
 						if(dx > 0){
-							evt.isect_triangle = 1;
+							voxel_side = 1;
 						}
 						else{
-							evt.isect_triangle = 2;
+							voxel_side = 2;
 						}
 						break;
 
 					case 1:
 						if(dy > 0){
-							evt.isect_triangle = 3;
+							voxel_side = 3;
 						}
 						else{
-							evt.isect_triangle = 4;
+							voxel_side = 4;
 						}
 						break;	
 					
 					default:
 						if(dz > 0){
-							evt.isect_triangle = 5;
+							voxel_side = 5;
 						}
 						else{
-							evt.isect_triangle = 6;
+							voxel_side = 6;
 						}
 						break;
 					}
+
+					uint64_t isect_id;
+
+					reinterpret_cast<int32_t*>(&isect_id)[0] = mat_grid[k + m * SIZE_X + l * SIZE_X * SIZE_Y];
+
+					reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
+
+					evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
+
+					return evt;
 				}
 				
 			}
@@ -268,8 +299,10 @@ namespace detail
 			using voxels_t = voxels<false>;
 			using triangle_index_t = voxels_t::triangle_index_t;
 
-			voxels_t geometry;
+			std::vector<int> a;
+			voxels_t geometry(3, {5, 5, 6}, a);
 
+			
 			/*if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
 				throw std::runtime_error("Too many triangles in geometry");
 			geometry._N = static_cast<triangle_index_t>(triangles.size());
@@ -280,17 +313,17 @@ namespace detail
 				geometry._triangles[i] = triangles[i];
 			}*/
 
-			geometry.set_AABB(AABB_min, AABB_max);
+			//geometry.set_AABB(AABB_min, AABB_max);
 
 			return geometry;
 		}
 
 		inline static CPU void free(voxels<false> & geometry)
 		{
-			::free(geometry._triangles);
+			//::free(geometry._triangles);
 
-			geometry._triangles = nullptr;
-			geometry._N = 0;
+			//geometry._triangles = nullptr;
+			//geometry._N = 0;
 		}
 	};
 
