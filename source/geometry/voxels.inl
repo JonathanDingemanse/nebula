@@ -112,9 +112,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	triangle const * ignore_triangle, int ignore_material) const
 {
 	intersect_event evt { distance, nullptr };
-
 	
-
 	int k = (int) (start.x / _voxel_size);
 	int l = (int) (start.y / _voxel_size);
 	int m = (int) (start.z / _voxel_size);
