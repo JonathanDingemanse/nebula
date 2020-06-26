@@ -31,6 +31,8 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	const int SAMPLE_HEIGHT = 300; // height of the sample (length between the sample and the top of the simulation domain) in voxels
 
+	vec3 shape = {SIZE_X, SIZE_Y, SIZE_Z}
+	
 	// Hier moet ergens een grid gemaakt worden, 
 		// een voor het materiaal, 
 		// een voor the timestamp van de electronen, 
@@ -40,10 +42,12 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	 // set the shape 
 
 	// set the initial geometry
+	std::vector<int> ini_geom;
+	
 	for (int i = 0; i < SIZE_X; i++) {
-		for (j = 0; j < SIZE_Y; j++) {
-			for (k = 0; k < SAMPLE_HEIGHT; k++) {
-				mat_grid[i + j * SIZE_X + k * SIZE_X * SIZE_Y] = -123;
+		for (int j = 0; j < SIZE_Y; j++) {
+			for (int k = 0; k < SAMPLE_HEIGHT; k++) {
+				ini_geom[i + j * SIZE_X + k * SIZE_X * SIZE_Y] = -123;
 			}
 		}
 	}
@@ -79,8 +83,10 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	AABB_min -= vec3{ 1, 1, 1 };
 	AABB_max += vec3{ 1, 1, 1 };
 	*/
+	
+	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom);
 
-	return detail::voxels_factory<gpu_flag>::create(triangles, AABB_min, AABB_max);
+	return geometry;
 }
 
 template<bool gpu_flag>
