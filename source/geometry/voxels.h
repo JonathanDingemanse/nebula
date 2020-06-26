@@ -106,9 +106,9 @@ private:
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
 	real _voxel_size;
-	real _size_x;
-	real _size_y;
-	real _size_z;
+	int _size_x;
+	int _size_y;
+	int _size_z;
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
