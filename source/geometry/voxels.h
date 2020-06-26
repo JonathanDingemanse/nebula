@@ -42,7 +42,7 @@ public:
 	 * \param shape Shape of the simulation domain in voxels, as vec3 {size_x, size_y, size_z}
 	 * \param initial_geometry The initial geometry of the sample, as a std::vector<int> of length size_x*size_y*size_z
 	 */
-	voxels(real vox_size, vec3 shape, std::vector<int> initial_geometry);
+	voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry);
 	/**
 	 * \brief Allocate memory for the triangles on the correct device.
 	 *
@@ -101,11 +101,11 @@ private:
 	CPU void set_AABB(vec3 min, vec3 max);
 
 	// These vectors are implicit 3D vectors, that represent a voxel grid
-	std::vector<int> mat_grid; // a voxel grid with nebula material codes. 
+	std::vector<int> _mat_grid; // a voxel grid with nebula material codes. 
 	//std::vector<int> tag_grid;
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
-	real voxel_size;
+	real _voxel_size;
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
