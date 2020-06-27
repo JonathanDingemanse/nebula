@@ -41,12 +41,10 @@ struct boundary_intersect
 		nbl::util::random_generator<gpu_flag>& rng) const
 	{
 		using material_index_t = typename material_manager::material_index_t;
-
-		std::clog << "Wordt deze functie uberhaupt wel aangeroepen? ";
-
+		
 		// Get particle data from particle manager
 		auto this_particle = particle_mgr[particle_idx];
-		const triangle this_triangle = *(particle_mgr.get_last_triangle(particle_idx));
+		//const triangle this_triangle = *(particle_mgr.get_last_triangle(particle_idx));
 		material_index_t material_idx_in = particle_mgr.get_material_index(particle_idx);
 
 		// Extract data from triangle pointer (code from luc)
@@ -54,10 +52,13 @@ struct boundary_intersect
 		material_index_t material_idx_out = reinterpret_cast<int32_t*>(&isect_id)[0];
 		int voxel_side = reinterpret_cast<int32_t*>(&isect_id)[1];
 
+		std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx);
+
 		// Get particle direction, normal of the intersected triangle
 		auto normalised_dir = normalised(this_particle.dir);
 		vec3 last_triangle_normal;
 
+		
 			// determine the normal of the voxel side using its number in range (1..6)
 		switch (voxel_side) 
 		{
@@ -118,6 +119,7 @@ struct boundary_intersect
 		switch (material_idx_out) {
 		case material_manager::DETECTOR:
 			particle_mgr.detect(particle_idx);
+			
 			return;
 		case material_manager::DETECTOR_LT50:
 			if (this_particle.kin_energy < 50)
