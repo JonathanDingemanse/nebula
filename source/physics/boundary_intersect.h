@@ -52,7 +52,7 @@ struct boundary_intersect
 		material_index_t material_idx_out = reinterpret_cast<int32_t*>(&isect_id)[0];
 		int voxel_side = reinterpret_cast<int32_t*>(&isect_id)[1];
 
-		std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx);
+		//std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx);
 
 		// Get particle direction, normal of the intersected triangle
 		auto normalised_dir = normalised(this_particle.dir);
@@ -115,7 +115,7 @@ struct boundary_intersect
 		//   DETECTOR_LT/GE50 detect under certain circumstances.
 		//     If not detected, they pass through as if no intersection event has taken place.
 		//
-		
+		//std::clog << "  Detection!!!  " << material_idx_out  << "  " << material_manager::DETECTOR;
 		switch (material_idx_out) {
 		case material_manager::DETECTOR:
 			particle_mgr.detect(particle_idx);

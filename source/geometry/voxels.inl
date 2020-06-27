@@ -65,11 +65,15 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 1) * SIZE_X * SIZE_Y) = -126;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 1) * SIZE_X * SIZE_Y) = -122;
 		}
 	}
 	
-	
+	for (int i = 0; i < SIZE_X; i++) {
+		for (int j = 0; j < SIZE_Y; j++) {
+			ini_geom.at(i + j * SIZE_X + 1 * SIZE_X * SIZE_Y) = -126;
+		}
+	}
 
 	// TODO: error message
 	/*if (triangles.empty())
@@ -195,6 +199,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		if(delta_s_min < 0.001)
 		{
+			std::clog << "\n0 in delta_smin";
 			if(delta_S.x < 0.001)
 			{
 				delta_S.x += 1 / dx;
@@ -294,7 +299,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 			uint64_t isect_id;
 
-			reinterpret_cast<int32_t*>(&isect_id)[0] = _mat_grid.at(k + m * _size_x + l * _size_x * _size_y);
+			reinterpret_cast<int32_t*>(&isect_id)[0] = new_mat;
 			reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
 			evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
 
