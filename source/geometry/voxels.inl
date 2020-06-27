@@ -58,8 +58,14 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			for (int k = 0; k < SAMPLE_HEIGHT; k++) {
-				ini_geom.at( i + j * SIZE_X + k * SIZE_X * SIZE_Y) = -123;
+				ini_geom.at( i + j * SIZE_X + k * SIZE_X * SIZE_Y) = -126;
 			}
+		}
+	}
+
+	for (int i = 0; i < SIZE_X; i++) {
+		for (int j = 0; j < SIZE_Y; j++) {
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 1) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
@@ -96,8 +102,6 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	*/
 	
 	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom);
-
-	
 	return geometry;
 }
 
@@ -167,7 +171,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	delta_S.z = delta_z/dz;
 	
-	while(distance > delta_s_min){
+	while(distance / _voxel_size >= delta_s_min){
+
+		std::clog << delta_s_min;
 
 		for (int i = 0; i < 3; i++) {
 
@@ -184,7 +190,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 				delta_S_i = delta_S.z;
 			}
 
-			if(delta_S_i < delta_s_min){
+			if(delta_S_i <= delta_s_min){
 				delta_s_min = delta_S_i;
 
 				vec3 new_pos = start + delta_s_min*dr;
@@ -217,6 +223,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 				if(_mat_grid.at( k + m*_size_x + l*_size_x*_size_y) != start_mat){
 					evt.isect_distance = delta_s_min * _voxel_size;
 
+					// Determine voxel side
 					int	voxel_side;
 					switch (i)
 					{
@@ -251,12 +258,26 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 					uint64_t isect_id;
 
 					reinterpret_cast<int32_t*>(&isect_id)[0] = _mat_grid.at(k + m * _size_x + l * _size_x * _size_y);
-
 					reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
-
 					evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
 
 					return evt;
+				}
+
+				// Calculate new value of delta_S_i for next iteration
+				switch (i)
+				{
+				case 0: 
+					delta_S.x += 1 / dx;
+					break;
+
+				case 1: 
+					delta_S.y += 1 / dy;
+					break;
+
+				default: 
+					delta_S.z += 1 / dz;
+					break;
 				}
 				
 			}
