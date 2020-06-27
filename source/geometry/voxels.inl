@@ -8,6 +8,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	_AABB_min = vec3{ 0, 0, 0 };
 	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
 
+	
 	_size_x = (int)shape.x;
 	_size_y = (int)shape.y;;
 	_size_z = (int)shape.z;
@@ -15,12 +16,15 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	const vec3 m = _AABB_max - _AABB_min;
 	_max_extent = magnitude(m);
 
-	_mat_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
+	_mat_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 
 		if (initial_geometry.size() != _size_x * _size_y * _size_z)
 		{
-			throw std::invalid_argument("initial geometry of wrong shape");
+			//throw std::invalid_argument("initial geometry of wrong shape");
+			std::clog << "Warning: initial geometry of wrong shape\n";
 		}
+
+	
 	_mat_grid = initial_geometry;
 }
 
@@ -34,7 +38,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	const int SIZE_Z = 700; // vertical size in voxels
 
 	const int SAMPLE_HEIGHT = 300; // height of the sample (length between the sample and the top of the simulation domain) in voxels
-
+	
 	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
 	// Hier moet ergens een grid gemaakt worden, 
@@ -48,6 +52,9 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	// set the initial geometry
 	std::vector<int> ini_geom;
 	
+
+	ini_geom.resize(SIZE_X * SIZE_Y * SIZE_Z, 0);
+	
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			for (int k = 0; k < SAMPLE_HEIGHT; k++) {
@@ -55,7 +62,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 			}
 		}
 	}
-
+	
 	
 
 	// TODO: error message
@@ -90,6 +97,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	
 	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom);
 
+	
 	return geometry;
 }
 
@@ -161,7 +169,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	
 	while(distance > delta_s_min){
 
-		for (int i; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 
 			real delta_S_i;
 			switch (i)

@@ -119,11 +119,12 @@ int main(int argc, char** argv)
 				"  Expected " << (max_material+1) << " materials, " << (pos_flags.size()-2) << " provided.\n";
 		}
 	}
-
+	
 	timer.start();
 	geometry_t geometry = geometry_t::create(triangles);
 	timer.stop("Building acceleration structure");
 
+	
 
 	// Load materials
 	std::clog << "Loading materials..." << std::endl;
