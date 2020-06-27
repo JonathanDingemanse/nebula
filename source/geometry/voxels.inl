@@ -58,7 +58,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			for (int k = 0; k < SAMPLE_HEIGHT; k++) {
-				ini_geom.at( i + j * SIZE_X + k * SIZE_X * SIZE_Y) = -126;
+				ini_geom.at( i + j * SIZE_X + k * SIZE_X * SIZE_Y) = -123;
 			}
 		}
 	}
@@ -121,169 +121,205 @@ PHYSICS bool voxels<gpu_flag>::in_domain(vec3 pos)
 
 template<bool gpu_flag>
 PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, real distance,
-	triangle const * ignore_triangle, int ignore_material) const
+	triangle const* ignore_triangle, int ignore_material) const
 {
-	intersect_event evt { distance, nullptr };
-	
-	int k = (int) (start.x / _voxel_size);
-	int l = (int) (start.y / _voxel_size);
-	int m = (int) (start.z / _voxel_size);
-	
-	int start_mat = _mat_grid.at(k + l*_size_x + m*_size_x*_size_y);
+	intersect_event evt{ distance, nullptr };
 
+	real x = start.x / _voxel_size; // create vars for the location elements
+	real y = start.y / _voxel_size;
+	real z = start.z / _voxel_size;
+	
 	real dx = direction.x / _voxel_size; // create vars for the direction elements
 	real dy = direction.y / _voxel_size;
 	real dz = direction.z / _voxel_size;
 
-	vec3 dr = {dx, dy, dz};
-	vec3 delta_S = {0, 0, 0};
+	vec3 dr = { dx, dy, dz };
+	vec3 delta_S = { 0, 0, 0 };
 
 	real delta_s_min = distance / _voxel_size;
 
+	int k = (int)(x);
+	int l = (int)(y);
+	int m = (int)(z);
+
+	int start_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
+
 	real delta_x;
-	if(dx > 0){
-		delta_x = std::ceil(dx) - dx;
+	if (dx > 0) {
+		delta_x = std::ceil(x) - x;
+		delta_S.x = delta_x / dx;
 	}
-	else{
-		delta_x = dx - std::floor(dx);
+	else if(dx < 0){
+		delta_x = x - std::floor(x);
+		delta_S.x = delta_x / dx;
 	}
-	delta_S.x = delta_x/dx;
-	
-	if(delta_s_min > delta_S.x){
-		delta_s_min = delta_S.x;
+	else // dx == 0
+	{
+		delta_S.x = distance / _voxel_size;
 	}
 
 	real delta_y;
-	if(dy > 0){
-		delta_y = std::ceil(dy) - dy;
+	if (dy > 0) {
+		delta_y = std::ceil(y) - y;
+		delta_S.y = delta_y / dy;
 	}
-	else{
-		delta_y = dy - std::floor(dy);
+	else if(dy < 0){
+		delta_y = y - std::floor(y);
+		delta_S.y = delta_y / dy;
 	}
-	delta_S.y = delta_y/dy;
+	else // dy == 0
+	{
+		delta_S.y = distance / _voxel_size;
+	}
 
 	real delta_z;
-	if(dz > 0){
-		delta_z = std::ceil(dz) - dz;
+	if (dz > 0) {
+		delta_z = std::ceil(z) - z;
+		delta_S.z = delta_z / dz;
 	}
-	else{
-		delta_z = dz - std::floor(dz);
+	else if(dz < 0) {
+		delta_z = z - std::floor(z);
+		delta_S.z = delta_z / dz;
 	}
-	delta_S.z = delta_z/dz;
-	
-	while(distance / _voxel_size >= delta_s_min){
+	else // dz == 0
+	{
+		delta_S.z = distance / _voxel_size;
+	}
 
-		std::clog << delta_s_min;
+	while (distance / _voxel_size >= delta_s_min) {
 
-		for (int i = 0; i < 3; i++) {
+		//std::clog << "\n" << delta_s_min ;
 
-			real delta_S_i;
-			switch (i)
+		// Determine minimum from delta_S
+		delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
+
+		if(delta_s_min < 0.001)
+		{
+			std::clog << "\n0 in delta_smin";
+			if(delta_S.x < 0.001)
+			{
+				delta_S.x += 1 / dx;
+			}
+			if (delta_S.y < 0.001)
+			{
+				delta_S.y += 1 / dy;
+			}
+			if (delta_S.z < 0.001)
+			{
+				delta_S.z += 1 / dz;
+			}
+			delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
+		}
+
+		int min_index = 0;
+		if(delta_s_min == delta_S.y)
+		{
+			min_index = 1;
+		}
+		else if (delta_s_min == delta_S.z)
+		{
+			min_index = 2;
+		}
+
+		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
+		const int min_i = min_index;
+
+		vec3 new_pos = start / _voxel_size + delta_s_min * dr;
+
+		int k;
+		int l;
+		int m;
+
+		switch (min_i)
+		{
+		case 0: // intersection with x-plane
+			k = (int)(new_pos.x + 0.1);
+			l = (int)(new_pos.y);
+			m = (int)(new_pos.z);
+			break;
+
+		case 1: // intersection with y-plane
+			k = (int)(new_pos.x);
+			l = (int)(new_pos.y + 0.1);
+			m = (int)(new_pos.z);
+			break;
+
+		default: // intersection with z-plane
+			k = (int)(new_pos.x);
+			l = (int)(new_pos.y);
+			m = (int)(new_pos.z + 0.1);
+			break;
+		}
+
+		int new_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
+
+		//std::clog << "   " << new_mat << "   " << start_mat;
+		
+		if (new_mat != start_mat) {
+
+			//std::clog << "intersection from " << start_mat << " to " << new_mat;
+			
+			evt.isect_distance = delta_s_min * _voxel_size;
+
+			// Determine voxel side
+			int	voxel_side;
+			switch (min_i)
 			{
 			case 0:
-				delta_S_i = delta_S.x;
+				if (dx > 0) {
+					voxel_side = 1;
+				}
+				else {
+					voxel_side = 2;
+				}
 				break;
+
 			case 1:
-				delta_S_i = delta_S.y;
+				if (dy > 0) {
+					voxel_side = 3;
+				}
+				else {
+					voxel_side = 4;
+				}
 				break;
+
 			default:
-				delta_S_i = delta_S.z;
+				if (dz > 0) {
+					voxel_side = 5;
+				}
+				else {
+					voxel_side = 6;
+				}
+				break;
 			}
 
-			if(delta_S_i <= delta_s_min){
-				delta_s_min = delta_S_i;
+			uint64_t isect_id;
 
-				vec3 new_pos = start + delta_s_min*dr;
+			reinterpret_cast<int32_t*>(&isect_id)[0] = new_mat;
+			reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
+			evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
 
-				int k;
-				int l;
-				int m;
+			return evt;
+		}
 
-				switch (i)
-				{
-				case 0: // intersection with x-plane
-					k = (int) (new_pos.x + 0.1);
-					l = (int) (new_pos.y);
-					m = (int) (new_pos.z);
-					break;
-				
-				case 1: // intersection with y-plane
-					k = (int) (new_pos.x);
-					l = (int) (new_pos.y + 0.1);
-					m = (int) (new_pos.z);
-					break;
+		// Calculate new value of delta_S_i for next iteration
+		switch (min_i)
+		{
+		case 0:
+			delta_S.x += 1 / dx;
+			break;
 
-				default: // intersection with z-plane
-					k = (int) (new_pos.x);
-					l = (int) (new_pos.y);
-					m = (int) (new_pos.z + 0.1);
-					break;
-				}
+		case 1:
+			delta_S.y += 1 / dy;
+			break;
 
-				if(_mat_grid.at( k + m*_size_x + l*_size_x*_size_y) != start_mat){
-					evt.isect_distance = delta_s_min * _voxel_size;
-
-					// Determine voxel side
-					int	voxel_side;
-					switch (i)
-					{
-					case 0:
-						if(dx > 0){
-							voxel_side = 1;
-						}
-						else{
-							voxel_side = 2;
-						}
-						break;
-
-					case 1:
-						if(dy > 0){
-							voxel_side = 3;
-						}
-						else{
-							voxel_side = 4;
-						}
-						break;	
-					
-					default:
-						if(dz > 0){
-							voxel_side = 5;
-						}
-						else{
-							voxel_side = 6;
-						}
-						break;
-					}
-
-					uint64_t isect_id;
-
-					reinterpret_cast<int32_t*>(&isect_id)[0] = _mat_grid.at(k + m * _size_x + l * _size_x * _size_y);
-					reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
-					evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
-
-					return evt;
-				}
-
-				// Calculate new value of delta_S_i for next iteration
-				switch (i)
-				{
-				case 0: 
-					delta_S.x += 1 / dx;
-					break;
-
-				case 1: 
-					delta_S.y += 1 / dy;
-					break;
-
-				default: 
-					delta_S.z += 1 / dz;
-					break;
-				}
-				
-			}
+		default:
+			delta_S.z += 1 / dz;
+			break;
 		}
 	}
-
+	return evt;
+	
 	/*for (triangle_index_t i = 0; i < _N; ++i)
 	{
 		if (_triangles + i == ignore_triangle)
@@ -311,7 +347,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			evt.isect_triangle = _triangles + i;
 		}
 	}*/
-	return evt;
+	
 }
 
 template<bool gpu_flag>
