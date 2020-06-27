@@ -65,7 +65,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 1) * SIZE_X * SIZE_Y) = -126;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 4) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
@@ -144,6 +144,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 	int start_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
 
+	if(start_mat == -122)
+	{
+		std::clog << "\n  Mirror!!!  " << start_mat << "\n";
+	}
+
 	real delta_x;
 	if (dx > 0) {
 		delta_x = std::ceil(x) - x;
@@ -151,7 +156,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	else if(dx < 0){
 		delta_x = x - std::floor(x);
-		delta_S.x = delta_x / dx;
+		delta_S.x = -delta_x / dx;
 	}
 	else // dx == 0
 	{
@@ -165,7 +170,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	else if(dy < 0){
 		delta_y = y - std::floor(y);
-		delta_S.y = delta_y / dy;
+		delta_S.y = -delta_y / dy;
 	}
 	else // dy == 0
 	{
@@ -179,7 +184,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	}
 	else if(dz < 0) {
 		delta_z = z - std::floor(z);
-		delta_S.z = delta_z / dz;
+		delta_S.z = -delta_z / dz;
 	}
 	else // dz == 0
 	{
@@ -193,20 +198,20 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		// Determine minimum from delta_S
 		delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
 
-		if(delta_s_min < 0.001)
+		if(delta_s_min < 0.000001)
 		{
-			std::clog << "\n0 in delta_smin";
-			if(delta_S.x < 0.001)
+			std::clog << "\n0 in delta_s_min " << delta_S.x << "  " << delta_S.y << "  " << delta_S.z;
+			if(delta_S.x < 0.000001)
 			{
-				delta_S.x += 1 / dx;
+				delta_S.x += std::abs(1 / dx);
 			}
-			if (delta_S.y < 0.001)
+			if (delta_S.y < 0.000001)
 			{
-				delta_S.y += 1 / dy;
+				delta_S.y += std::abs(1 / dy);
 			}
-			if (delta_S.z < 0.001)
+			if (delta_S.z < 0.000001)
 			{
-				delta_S.z += 1 / dz;
+				delta_S.z += std::abs(1 / dz);
 			}
 			delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
 		}
@@ -257,7 +262,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) {
 
-			//std::clog << "intersection from " << start_mat << " to " << new_mat;
+			std::clog << "\nintersection from " << start_mat << " to " << new_mat;
 			
 			evt.isect_distance = delta_s_min * _voxel_size;
 
@@ -306,15 +311,15 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		switch (min_i)
 		{
 		case 0:
-			delta_S.x += 1 / dx;
+			delta_S.x += std::abs(1 / dx);
 			break;
 
 		case 1:
-			delta_S.y += 1 / dy;
+			delta_S.y += std::abs(1 / dy);
 			break;
 
 		default:
-			delta_S.z += 1 / dz;
+			delta_S.z += std::abs(1 / dz);
 			break;
 		}
 	}
