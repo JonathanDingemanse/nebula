@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 			if (tri.material_out > max_material)
 				max_material = tri.material_out;
 		}*/
-		int max_material = 1; // in the first version of the dynamic version there is only one material 
+		int max_material = 0; // in the first version of the dynamic version there is only one material 
 
 		if (max_material > int(pos_flags.size())-3)
 		{
