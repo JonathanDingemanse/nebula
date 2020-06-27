@@ -42,6 +42,8 @@ struct boundary_intersect
 	{
 		using material_index_t = typename material_manager::material_index_t;
 
+		std::clog << "Wordt deze functie uberhaupt wel aangeroepen? ";
+
 		// Get particle data from particle manager
 		auto this_particle = particle_mgr[particle_idx];
 		const triangle this_triangle = *(particle_mgr.get_last_triangle(particle_idx));
@@ -111,6 +113,8 @@ struct boundary_intersect
 		//   DETECTOR always detects.
 		//   DETECTOR_LT/GE50 detect under certain circumstances.
 		//     If not detected, they pass through as if no intersection event has taken place.
+		//
+		
 		switch (material_idx_out) {
 		case material_manager::DETECTOR:
 			particle_mgr.detect(particle_idx);
