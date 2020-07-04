@@ -139,7 +139,7 @@ void cpu_driver<scatter_list_t, intersect_t, geometry_manager_t>::intersect(part
 	if (!_particles.next_intersect(particle_idx))
 		return;
 
-	_intersect.execute(_materials, _particles, particle_idx, rand_state);
+	_intersect.execute(_materials, _particles, particle_idx, rand_state, _geometry);
 }
 
 template<typename scatter_list_t,
@@ -156,7 +156,7 @@ void cpu_driver<scatter_list_t, intersect_t, geometry_manager_t>::scatter(partic
 	_particles.forget_last_triangle(particle_idx);
 
 	_materials[_particles.get_material_index(particle_idx)].execute(
-		_particles.get_next_scatter(particle_idx), _particles, particle_idx, rand_state);
+		_particles.get_next_scatter(particle_idx), _particles, particle_idx, rand_state, _geometry);
 }
 
 }} // namespace nbl::drivers
