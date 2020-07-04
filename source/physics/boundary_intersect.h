@@ -150,7 +150,7 @@ struct boundary_intersect
 		if (material_mgr.is_physical(material_idx_out)) {
 			dU += material_mgr[material_idx_out].barrier;
 		}
-		std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx) << "  " << voxel_side;
+		//std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx) << "  " << voxel_side;
 		// determine transmission probability (only if energy suffices)
 		// see thesis T.V. Eq. 3.145
 		if (this_particle.kin_energy*cos_theta*cos_theta + dU > 0)

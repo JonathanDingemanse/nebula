@@ -233,11 +233,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
 			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z))) // if out of range, return
 		{
-			std::clog << "\n exit";
+			//std::clog << "\n exit";
 			return evt;
 		}
 
-		std::clog << "\nposition: " << new_pos.x << "  " << new_pos.y << "  " << new_pos.z;
+		//std::clog << "\nposition: " << new_pos.x << "  " << new_pos.y << "  " << new_pos.z;
 
 		int k;
 		int l;
@@ -293,7 +293,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) {
 
-			std::clog << "\nintersection from " << start_mat << " to " << new_mat;
+			//std::clog << "\nintersection from " << start_mat << " to " << new_mat;
 			
 			evt.isect_distance = delta_s_min * _voxel_size;
 
@@ -354,7 +354,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}
 	}
-	std::clog << "\n turn";
+	//std::clog << "\n turn";
 	return evt;
 	
 	/*for (triangle_index_t i = 0; i < _N; ++i)
