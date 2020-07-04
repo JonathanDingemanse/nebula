@@ -196,7 +196,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		if(delta_s_min < 0.000001)
 		{
-			std::clog << "\n0 in delta_s_min " << delta_S.x << "  " << delta_S.y << "  " << delta_S.z;
+			//std::clog << "\n0 in delta_s_min " << delta_S.x << "  " << delta_S.y << "  " << delta_S.z;
 			if(delta_S.x < 0.000001)
 			{
 				delta_S.x += std::abs(1 / dx);
