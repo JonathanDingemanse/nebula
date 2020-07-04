@@ -38,7 +38,7 @@ struct boundary_intersect
 	template<typename particle_manager, typename material_manager, typename geometry_manager, bool gpu_flag>
 	PHYSICS void execute(material_manager& material_mgr,
 	                     particle_manager& particle_mgr, typename particle_manager::particle_index_t particle_idx,
-	                     nbl::util::random_generator<gpu_flag>& rng, geometry_manager& geometry_manager) const
+	                     nbl::util::random_generator<gpu_flag>& rng) const
 	{
 		using material_index_t = typename material_manager::material_index_t;
 		
