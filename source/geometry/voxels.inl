@@ -248,7 +248,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		switch (min_i)
 		{
 		case 0: // intersection with x-plane
-			dx_sgn =/ dx / std::abs(dx);
+			dx_sgn = dx / std::abs(dx);
 			k = (int)std::floor(new_pos.x + 0.1 * dx_sgn);
 			l = (int)std::floor(new_pos.y);
 			m = (int)std::floor(new_pos.z);
