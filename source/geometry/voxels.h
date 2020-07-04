@@ -105,10 +105,10 @@ private:
 	//std::vector<int> tag_grid;
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
-	real _voxel_size;
-	int _size_x;
-	int _size_y;
-	int _size_z;
+	real _voxel_size; // voxel size in nm
+	int _size_x; // simulation domain size in x direction
+	int _size_y; // .. y direction
+	int _size_z; // .. z direction
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
