@@ -65,7 +65,13 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SIZE_Z - 1) * SIZE_X * SIZE_Y) = -122;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 2) * SIZE_X * SIZE_Y) = -122;
+		}
+	}
+	
+	for (int i = 0; i < SIZE_X; i++) {
+		for (int j = 0; j < SIZE_Y; j++) {
+			ini_geom.at(i + j * SIZE_X + (0) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
