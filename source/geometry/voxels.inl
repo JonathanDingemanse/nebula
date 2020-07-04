@@ -231,7 +231,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		if(!((pos.x > _AABB_min.x) && (pos.x < _AABB_max.x)
 			&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
-			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z)))
+			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z))) // if out of range, return
 		{
 			return evt;
 		}
@@ -252,6 +252,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			k = (int)std::floor(new_pos.x + 0.1 * dx_sgn);
 			l = (int)std::floor(new_pos.y);
 			m = (int)std::floor(new_pos.z);
+			
+			if (k >= _size_x || k < 0)
+			{
+				return evt;
+			}
 			break;
 
 		case 1: // intersection with y-plane
@@ -259,6 +264,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			k = (int)std::floor(new_pos.x);
 			l = (int)std::floor(new_pos.y + 0.1 * dy_sgn);
 			m = (int)std::floor(new_pos.z);
+			
+			if (l >= _size_y || l < 0)
+			{
+				return evt;
+			}
 			break;
 
 		default: // intersection with z-plane
@@ -266,9 +276,13 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			k = (int)std::floor(new_pos.x);
 			l = (int)std::floor(new_pos.y);
 			m = (int)std::floor(new_pos.z + 0.1 *dz_sgn);
+
+			if(m >= _size_z || m < 0)
+			{
+				return evt;
+			}
 			break;
-		}
-		
+		}		
 		
 		int new_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
 
