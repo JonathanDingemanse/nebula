@@ -225,7 +225,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
 		const int min_i = min_index;
 
-		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.001) * dr; // new position in voxels
+		vec3 new_pos = start / _voxel_size + (delta_s_min /*+ 0.001*/) * dr; // new position in voxels
 
 		vec3 pos = new_pos * _voxel_size; // new position in nm, for check
 
@@ -251,8 +251,8 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		switch (min_i)
 		{
 		case 0: // intersection with x-plane
-			dx_sgn = 0; // dx / std::abs(dx);
-			k = (int)std::floor(new_pos.x + 0.1 * dx_sgn);
+			dx_sgn = dx / std::abs(dx);
+			k = (int)std::floor(new_pos.x + 0.001 * dx_sgn);
 			l = (int)std::floor(new_pos.y);
 			m = (int)std::floor(new_pos.z);
 			
@@ -263,9 +263,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 
 		case 1: // intersection with y-plane
-			dy_sgn = 0; // dy / std::abs(dy);
+			dy_sgn =  dy / std::abs(dy);
 			k = (int)std::floor(new_pos.x);
-			l = (int)std::floor(new_pos.y + 0.1 * dy_sgn);
+			l = (int)std::floor(new_pos.y + 0.001 * dy_sgn);
 			m = (int)std::floor(new_pos.z);
 			
 			if (l >= _size_y || l < 0)
@@ -275,10 +275,10 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 
 		default: // intersection with z-plane
-			dz_sgn = 0; //dz / std::abs(dz);
+			dz_sgn = dz / std::abs(dz);
 			k = (int)std::floor(new_pos.x);
 			l = (int)std::floor(new_pos.y);
-			m = (int)std::floor(new_pos.z + 0.1 *dz_sgn);
+			m = (int)std::floor(new_pos.z + 0.001 *dz_sgn);
 
 			if(m >= _size_z || m < 0)
 			{
