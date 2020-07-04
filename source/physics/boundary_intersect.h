@@ -77,11 +77,11 @@ struct boundary_intersect
 			break;
 
 		case 5:
-			last_triangle_normal = { 0, 0, -1 };
+			last_triangle_normal = { 0, 0, 1 };
 			break;
 
 		case 6:
-			last_triangle_normal = { 0, 0, 1 };
+			last_triangle_normal = { 0, 0, -1 };
 			break;
 			
 		//default:	
