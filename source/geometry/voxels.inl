@@ -64,13 +64,13 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	// Add layers of detectors for testing
 	
-	/*for (int i = 0; i < SIZE_X; i++) {
+	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 2) * SIZE_X * SIZE_Y) = -126;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 8) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
-	for (int i = 0; i < SIZE_X; i++) {
+	/*for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			ini_geom.at(i + j * SIZE_X + (0) * SIZE_X * SIZE_Y) = -126;
 		}
