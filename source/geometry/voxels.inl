@@ -227,7 +227,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.0001) * dr; // new position in voxels
 
-		if(!this.in_domain(new_pos * _voxel_size))
+		vec3 pos = new_pos * _voxel_size; // new position in nm, for check
+
+		if(!((pos.x > _AABB_min.x) && (pos.x < _AABB_max.x)
+			&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
+			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z)))
 		{
 			return evt;
 		}
