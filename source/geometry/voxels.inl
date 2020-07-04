@@ -52,8 +52,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	// set the initial geometry
 	std::vector<int> ini_geom;
 	
-
-	ini_geom.resize(SIZE_X * SIZE_Y * SIZE_Z, 0);
+	ini_geom.resize(SIZE_X * SIZE_Y * SIZE_Z, 0); 
 	
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
@@ -63,9 +62,11 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 		}
 	}
 
-	for (int i = 0; i < SIZE_X; i++) {
+	// Add layers of detectors for testing
+	
+	/*for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 2) * SIZE_X * SIZE_Y) = -127;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT - 2) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
@@ -73,7 +74,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 		for (int j = 0; j < SIZE_Y; j++) {
 			ini_geom.at(i + j * SIZE_X + (0) * SIZE_X * SIZE_Y) = -126;
 		}
-	}
+	}*/
 	
 	
 
@@ -131,6 +132,8 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 {
 	intersect_event evt{ distance, nullptr };
 
+
+	// 
 	real x = start.x / _voxel_size; // create vars for the location elements
 	real y = start.y / _voxel_size;
 	real z = start.z / _voxel_size;
@@ -142,19 +145,15 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	vec3 dr = { dx, dy, dz };
 	vec3 delta_S = { 0, 0, 0 };
 
-	real delta_s_min = distance / _voxel_size;
+	real delta_s_min = distance / _voxel_size; // holds the shortest pathlength to an intersection
 
 	int start_mat = ignore_material;
 
-	if(start_mat == -122)
-	{
-		std::clog << "\n  Mirror!!!  " << start_mat << "\n";
-	}
-
-	real delta_x;
+	// calculate the distances to the first planes in the 3 dimensions
+	real delta_x;	// delta_x is the distance (perpendicular to the plane) to the next plane in the x direction
 	if (dx > 0) {
 		delta_x = std::ceil(x) - x;
-		delta_S.x = delta_x / dx;
+		delta_S.x = delta_x / dx; // delta_S.x now is the path length to the next plane in the x direction
 	}
 	else if(dx < 0){
 		delta_x = x - std::floor(x);
@@ -193,19 +192,19 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		delta_S.z = distance / _voxel_size;
 	}
 
-	while (distance / _voxel_size >= delta_s_min) {
+	while (distance / _voxel_size >= delta_s_min) { 
 
 		//std::clog << "\n" << delta_s_min ;
 
-		// Determine minimum from delta_S
+		// Determine minimum path length from delta_S
 		delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
 
-		if(delta_s_min < 0.000001)
+		if(delta_s_min < 0.000001) // handle the case that delta_s_min is zero, which is typically the case after an intersection
 		{
 			//std::clog << "\n0 in delta_s_min " << delta_S.x << "  " << delta_S.y << "  " << delta_S.z;
 			if(delta_S.x < 0.000001)
 			{
-				delta_S.x += std::abs(1 / dx);
+				delta_S.x += std::abs(1 / dx); // add one path length between two planes to delta_S.x
 			}
 			if (delta_S.y < 0.000001)
 			{
@@ -215,10 +214,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			{
 				delta_S.z += std::abs(1 / dz);
 			}
-			delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
+			delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z); // and determine the minimum again
 		}
 
-		int min_index = 0;
+		int min_index = 0; // min_index is 0 for een intersection with the x-plane, 1 for an intersection with the y-plane
+		//and 2 for an intersection with the z-plane
 		if(delta_s_min == delta_S.y)
 		{
 			min_index = 1;
@@ -229,15 +229,16 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		}
 
 		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
-		const int min_i = min_index;
+		const int min_i = min_index; // store min_index in a constant
 
-		vec3 new_pos = start / _voxel_size + (delta_s_min /*+ 0.001*/) * dr; // new position in voxels
+		vec3 new_pos = start / _voxel_size + (delta_s_min /*+ 0.001*/) * dr; // new position if there is an intersection in voxels
 
 		vec3 pos = new_pos * _voxel_size; // new position in nm, for check
 
 		if(!((pos.x > _AABB_min.x) && (pos.x < _AABB_max.x)
 			&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
-			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z))) // if out of range, return
+			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z))) 
+			// check whether the electron is still in the simulation domain, if not, return
 		{
 			//std::clog << "\n exit";
 			return evt;
@@ -245,20 +246,23 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		//std::clog << "\nposition: " << new_pos.x << "  " << new_pos.y << "  " << new_pos.z;
 
-		int k;
+		int k; // indices of the material grid
 		int l;
 		int m;
 
-		real dx_sgn = 0;
+		real dx_sgn = 0; // signs of dx, dy and dz
 		real dy_sgn = 0;
 		real dz_sgn = 0;
 		
 		//std::clog << "\n" << dx_sgn << "   " << dy_sgn << "   " << dz_sgn;
+
+		// determine the indices of the next cell that the electron will enter
 		switch (min_i)
 		{
 		case 0: // intersection with x-plane
-			dx_sgn = dx / std::abs(dx);
-			k = (int)std::floor(new_pos.x + 0.001 * dx_sgn);
+			dx_sgn = dx / std::abs(dx); // determine sign of dx
+			k = (int)std::floor(new_pos.x + 0.001 * dx_sgn); // calculate the indices by flooring the new position plus a
+			// little inward 
 			l = (int)std::floor(new_pos.y);
 			m = (int)std::floor(new_pos.z);
 			
@@ -293,15 +297,15 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}		
 		
-		int new_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
+		int new_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y); // determine material using the material indices
 
 		//std::clog << "   " << new_mat << "   " << start_mat;
 		
-		if (new_mat != start_mat) {
+		if (new_mat != start_mat) { // if there is een intersection, return the intersection event
 
 			//std::clog << "\nintersection from " << start_mat << " to " << new_mat;
 			
-			evt.isect_distance = delta_s_min * _voxel_size;
+			evt.isect_distance = delta_s_min * _voxel_size; // set the distance to the intersection
 
 			// Determine voxel side
 			int	voxel_side;
@@ -335,16 +339,17 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 				break;
 			}
 
+			// put an identifier for the new material and a voxel side identifier in the triangle pointer
 			uint64_t isect_id;
-
 			reinterpret_cast<int32_t*>(&isect_id)[0] = new_mat;
 			reinterpret_cast<int32_t*>(&isect_id)[1] = voxel_side;
 			evt.isect_triangle = reinterpret_cast<triangle*>(isect_id);
 
-			return evt;
+			return evt; // return the event
 		}
 
-		// Calculate new value of delta_S_i for next iteration
+		// if there is no intersection:
+		// Calculate new value of delta_S.i for next iteration
 		switch (min_i)
 		{
 		case 0:
@@ -361,6 +366,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		}
 	}
 	//std::clog << "\n turn";
+	// if no intersection was found, return the standard event. 
 	return evt;
 	
 	/*for (triangle_index_t i = 0; i < _N; ++i)
