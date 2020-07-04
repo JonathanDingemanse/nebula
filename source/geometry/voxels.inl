@@ -225,7 +225,12 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
 		const int min_i = min_index;
 
-		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.0001) * dr;
+		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.0001) * dr; // new position in voxels
+
+		if(~this.in_domain(new_pos * _voxel_size))
+		{
+			return evt;
+		}
 
 		int k;
 		int l;
@@ -259,7 +264,8 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			m = (int)std::floor(new_pos.z + 0.1 *dz_sgn);
 			break;
 		}
-
+		
+		
 		int new_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
 
 		//std::clog << "   " << new_mat << "   " << start_mat;
