@@ -65,7 +65,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 4) * SIZE_X * SIZE_Y) = -123;
+			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 4) * SIZE_X * SIZE_Y) = -126;
 		}
 	}
 	
@@ -138,11 +138,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 	real delta_s_min = distance / _voxel_size;
 
-	int k = (int)(x);
-	int l = (int)(y);
-	int m = (int)(z);
-
-	int start_mat = _mat_grid.at(k + l * _size_x + m * _size_x * _size_y);
+	int start_mat = ignore_material;
 
 	if(start_mat == -122)
 	{
@@ -229,30 +225,38 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
 		const int min_i = min_index;
 
-		vec3 new_pos = start / _voxel_size + delta_s_min * dr;
+		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.0001) * dr;
 
 		int k;
 		int l;
 		int m;
 
+		real dx_sgn = 0;
+		real dy_sgn = 0;
+		real dz_sgn = 0;
+		
+		//std::clog << "\n" << dx_sgn << "   " << dy_sgn << "   " << dz_sgn;
 		switch (min_i)
 		{
 		case 0: // intersection with x-plane
-			k = (int)(new_pos.x + 0.1);
-			l = (int)(new_pos.y);
-			m = (int)(new_pos.z);
+			dx_sgn = 0;// dx / std::abs(dx);
+			k = (int)std::floor(new_pos.x + 0.1 * dx_sgn);
+			l = (int)std::floor(new_pos.y);
+			m = (int)std::floor(new_pos.z);
 			break;
 
 		case 1: // intersection with y-plane
-			k = (int)(new_pos.x);
-			l = (int)(new_pos.y + 0.1);
-			m = (int)(new_pos.z);
+			dy_sgn = 0;// dy / std::abs(dy);
+			k = (int)std::floor(new_pos.x);
+			l = (int)std::floor(new_pos.y + 0.1 * dy_sgn);
+			m = (int)std::floor(new_pos.z);
 			break;
 
 		default: // intersection with z-plane
-			k = (int)(new_pos.x);
-			l = (int)(new_pos.y);
-			m = (int)(new_pos.z + 0.1);
+			dz_sgn = 0;// dz / std::abs(dz);
+			k = (int)std::floor(new_pos.x);
+			l = (int)std::floor(new_pos.y);
+			m = (int)std::floor(new_pos.z + 0.1 *dz_sgn);
 			break;
 		}
 

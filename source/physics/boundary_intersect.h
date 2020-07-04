@@ -52,8 +52,6 @@ struct boundary_intersect
 		material_index_t material_idx_out = reinterpret_cast<int32_t*>(&isect_id)[0];
 		int voxel_side = reinterpret_cast<int32_t*>(&isect_id)[1];
 
-		std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx);
-
 		// Get particle direction, normal of the intersected triangle
 		auto normalised_dir = normalised(this_particle.dir);
 		vec3 last_triangle_normal;
@@ -79,11 +77,11 @@ struct boundary_intersect
 			break;
 
 		case 5:
-			last_triangle_normal = { 0, 0, 1 };
+			last_triangle_normal = { 0, 0, -1 };
 			break;
 
 		case 6:
-			last_triangle_normal = { 0, 0, -1 };
+			last_triangle_normal = { 0, 0, 1 };
 			break;
 			
 		//default:	
@@ -141,7 +139,7 @@ struct boundary_intersect
 		default:
 			break;
 		}
-
+		
 
 		// determine the change in energy `dU` (in eV) when passing through the interface
 		// see thesis T.V. Eq. 3.136
@@ -152,7 +150,7 @@ struct boundary_intersect
 		if (material_mgr.is_physical(material_idx_out)) {
 			dU += material_mgr[material_idx_out].barrier;
 		}
-
+		std::clog << "\nParticle: " << particle_mgr.get_primary_tag(particle_idx) << "  " << voxel_side;
 		// determine transmission probability (only if energy suffices)
 		// see thesis T.V. Eq. 3.145
 		if (this_particle.kin_energy*cos_theta*cos_theta + dU > 0)
@@ -180,7 +178,7 @@ struct boundary_intersect
 				return;
 			}
 		}
-
+		
 		// surface absorption? (this is in accordance with Kieft & Bosch code)
 		// note that the default behaviour has this feature disabled
 		if (interface_absorption)
