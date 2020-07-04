@@ -227,7 +227,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		vec3 new_pos = start / _voxel_size + (delta_s_min + 0.0001) * dr; // new position in voxels
 
-		if(~this.in_domain(new_pos * _voxel_size))
+		if(!this.in_domain(new_pos * _voxel_size))
 		{
 			return evt;
 		}
