@@ -233,6 +233,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			&& (pos.y > _AABB_min.y) && (pos.y < _AABB_max.y)
 			&& (pos.z > _AABB_min.z) && (pos.z < _AABB_max.z))) // if out of range, return
 		{
+			std:std::clog << "\n exit";
 			return evt;
 		}
 
@@ -353,6 +354,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}
 	}
+	std:std::clog << "\n turn";
 	return evt;
 	
 	/*for (triangle_index_t i = 0; i < _N; ++i)
