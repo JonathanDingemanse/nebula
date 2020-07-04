@@ -236,7 +236,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			return evt;
 		}
 
-		std::clog << new_pos 
+		std::clog << new_pos;
 
 		int k;
 		int l;
