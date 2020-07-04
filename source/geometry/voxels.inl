@@ -129,9 +129,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	real y = start.y / _voxel_size;
 	real z = start.z / _voxel_size;
 	
-	real dx = direction.x / _voxel_size; // create vars for the direction elements
-	real dy = direction.y / _voxel_size;
-	real dz = direction.z / _voxel_size;
+	real dx = direction.x; // create vars for the direction elements
+	real dy = direction.y;
+	real dz = direction.z;
 
 	vec3 dr = { dx, dy, dz };
 	vec3 delta_S = { 0, 0, 0 };
