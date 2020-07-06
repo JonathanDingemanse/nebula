@@ -416,14 +416,14 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 
 	std::clog << "A deposition at: " << k << "  " << l << "  " << m << "\n";
 
-	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "   ";
+	std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "   ";
 
 	_mat_grid[k + l * _size_x + m * _size_x * _size_y] = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
 	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
 
-	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
+	std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
 }
 
 template<bool gpu_flag>

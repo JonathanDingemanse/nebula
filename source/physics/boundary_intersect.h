@@ -179,7 +179,6 @@ struct boundary_intersect
 
 					if(material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
 					{
-						std::clog << material_idx_in << "  " << material_idx_out << "\n";
 						vec3 dep_pos;
 						if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
 						{
