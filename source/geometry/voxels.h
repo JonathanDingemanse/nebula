@@ -18,16 +18,13 @@ namespace detail
 }
 
 /**
- * \brief Stores geometry as a list of triangles.
+ * \brief Stores geometry as a list of voxel cells.
  *
  * This class is responsible for the collision detection system. It holds the
- * simulation domain (a finite axis-aligned box) and the triangles.
+ * simulation domain (a finite axis-aligned box) and a vector which holds the material inside the voxel.
  *
- * This is the simplest implementation, simply holding a list of all triangles.
- * When checking for collisions, it simply tries all of them in turn.
- *
- * It is allocated by the static {@link create} and {@link destroy} functions,
- * there is no constructor or destructor to be used.
+ * It is allocated by the static {@link create} and {@link destroy} functions.
+ * There is a simple straightforward constructor, but no destructor.
  */
 template<bool gpu_flag>
 class voxels
@@ -71,9 +68,7 @@ public:
 	 * \param start           The particle's starting position
 	 * \param direction       Direction the particle is going in
 	 * \param distance        Distance the particle travels, in units of direction
-	 * \param ignore_triangle Triangle to ignore. Used to prevent the particle
-	 *                        from intersecting the same triangle twice in case
-	 *                        of numerical error.
+	 * \param ignore_triangle Triangle to ignore. This is not used in this voxel version.
 	 * \param ignore_material Destination material to ignore (most likely the
 	 *                        particle's current material).
 	 *
