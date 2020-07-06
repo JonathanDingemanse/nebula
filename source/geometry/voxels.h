@@ -118,7 +118,7 @@ private:
 	std::vector<real> _dz_grid;  // .. with dz's
 	
 	real _voxel_size; // voxel size in nm
-	int _size_x; // simulation domain size in x direction
+	int _size_x; // simulation domain size in x direction in voxels
 	int _size_y; // .. y direction
 	int _size_z; // .. z direction
 	int _min_save_height = 0; // voxels with z-index < _min_save_height will not be saved
