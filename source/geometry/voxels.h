@@ -21,7 +21,7 @@ namespace detail
  * \brief Stores geometry as a list of voxel cells.
  *
  * This class is responsible for the collision detection system. It holds the
- * simulation domain (a finite axis-aligned box) and a vector which holds the material inside the voxel.
+ * simulation domain (a finite axis-aligned box) and a vector which holds the materials inside the voxels.
  *
  * It is allocated by the static {@link create} and {@link destroy} functions.
  * There is a simple straightforward constructor, but no destructor.
@@ -76,6 +76,17 @@ public:
 	 */
 	inline PHYSICS intersect_event propagate(vec3 start, vec3 direction, real distance,
 		triangle const * ignore_triangle, int ignore_material) const;
+
+	/**
+	 * \brief Set the material of a certain voxel
+	 *
+	 * Set the material in the voxel that contains position to value material. 
+	 *
+	 * \param position           Where to set the material
+	 * \param material			 The material to which the voxel will be set
+	 */
+
+	inline PHYSICS void set_material(vec3 position, int material);
 
 	/**
 	 * \brief Get the maximum distance that can be travelled inside the

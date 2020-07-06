@@ -2,6 +2,7 @@
 #define __BOUNDARY_INTERSECT_H_
 
 #include "../core/triangle.h"
+#include "../geometry/voxels.h"
 
 /**
  * \brief Material boundary intersection.
@@ -22,6 +23,8 @@ struct boundary_intersect
 	/**
 	 * \brief Print diagnostic info
 	 */
+	nbl::geometry::voxels<false>* geometry;
+	
 	static void print_info(std::ostream& stream)
 	{
 		stream << std::boolalpha <<

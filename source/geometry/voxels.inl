@@ -399,6 +399,16 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	
 }
 
+template <bool gpu_flag>
+void voxels<gpu_flag>::set_material(vec3 position, int material)
+{
+	int k = (int) position.x;
+	int l = (int) position.y;
+	int m = (int) position.z;
+
+	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+}
+
 template<bool gpu_flag>
 PHYSICS real voxels<gpu_flag>::get_max_extent() const
 {
