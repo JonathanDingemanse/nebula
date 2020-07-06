@@ -1,4 +1,7 @@
 #include "voxels.h"
+#include <iostream>
+#include <fstream>
+
 namespace nbl { namespace geometry {
 
 template<bool gpu_flag>
@@ -410,7 +413,7 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	int m = (int) position.z;
 
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
-	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag;
+	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
 	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
 }
@@ -430,6 +433,21 @@ template<bool gpu_flag>
 inline PHYSICS vec3 voxels<gpu_flag>::AABB_max() const
 {
 	return _AABB_max;
+}
+
+template <bool gpu_flag>
+void voxels<gpu_flag>::save(const std::string file_name)
+{
+	std::ofstream file;
+	file.open(file_name);
+	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _size_z << "\n";
+
+	for(int i = 0; i < _mat_grid.size(); i++)
+	{
+		file << _mat_grid.at(i) << "\t" << _tag_grid.at(i) << "\t" << _e_grid.at(i) << "\t" << _dz_grid.at(i) << "\n";
+	}
+	
+	file.close();
 }
 
 template<bool gpu_flag>

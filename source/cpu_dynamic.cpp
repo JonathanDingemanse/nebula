@@ -227,6 +227,8 @@ int main(int argc, char** argv)
 			break;
 	}
 
+	geometry.save("final_geometry.vox"); // save the final geometry
+	
 	for (auto& t : threads)
 		t.join();
 

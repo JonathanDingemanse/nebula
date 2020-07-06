@@ -103,6 +103,11 @@ public:
 	 */
 	inline PHYSICS vec3 AABB_max() const;
 
+	/**
+	 * \brief Get the (axis-aligned) simulation domain.
+	 */
+	inline CPU void save(std::string file_name);
+
 private:
 	CPU void set_AABB(vec3 min, vec3 max);
 
