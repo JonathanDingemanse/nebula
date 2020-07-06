@@ -157,7 +157,7 @@ int main(int argc, char** argv)
 	// This manages the work to be done (thread-safe).
 	work_pool pool(primaries.data(), gpu_tags.data(), primaries.size());
 
-	intersect_t inter;
+	intersect_t inter{ &geometry };
 
 	// Print debug data
 	std::clog << "\n"
