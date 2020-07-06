@@ -17,7 +17,8 @@
 template<
 	bool quantum_transmission = true,
 	bool interface_refraction = true,
-	bool interface_absorption = false>
+	bool interface_absorption = false,
+	bool deposition = true>
 struct boundary_intersect
 {
 	/**
@@ -170,6 +171,21 @@ struct boundary_intersect
 					// see thesis T.V. Eq. 3.139
 					this_particle.dir = (normalised_dir - last_triangle_normal*cos_theta)
 						+ s * last_triangle_normal * cos_theta;
+				}
+
+				if (deposition)
+				{
+					// deposit a voxel of material 0
+					if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
+					{
+						auto dep_pos = -0.1 * last_triangle_normal + this_particle.pos; // deposition position
+						geometry->set_material(dep_pos, 0);
+					}
+					else if (material_idx_out == material_manager::VACUUM) // electron enters vacuum from material
+					{
+						auto dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
+						geometry->set_material(dep_pos, 0);
+					}
 				}
 
 				// if there is transmission, then adjust the kinetic energy,
