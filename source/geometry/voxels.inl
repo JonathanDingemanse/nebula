@@ -474,7 +474,7 @@ namespace detail
 			using triangle_index_t = voxels_t::triangle_index_t;
 
 			std::vector<int> a;
-			voxels_t geometry(3, {5, 5, 6}, a);
+			voxels_t geometry(3, {5, 5, 6}, a, 9);
 
 			
 			/*if (triangles.size() > std::numeric_limits<triangle_index_t>::max())

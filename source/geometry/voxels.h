@@ -39,7 +39,7 @@ public:
 	 * \param shape Shape of the simulation domain in voxels, as vec3 {size_x, size_y, size_z}
 	 * \param initial_geometry The initial geometry of the sample, as a std::vector<int> of length size_x*size_y*size_z
 	 */
-	voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry);
+	voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry, int max_save_height);
 	/**
 	 * \brief Allocate memory for the triangles on the correct device.
 	 *
