@@ -121,7 +121,8 @@ private:
 	int _size_x; // simulation domain size in x direction
 	int _size_y; // .. y direction
 	int _size_z; // .. z direction
-	int _sample_height // voxels with z-index > sample_height will not be saved
+	int _min_save_height = 0; // voxels with z-index < _min_save_height will not be saved
+	int _max_save_height; //  voxels with z-index > _max_save_height will not be saved
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;
