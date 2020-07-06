@@ -304,7 +304,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}
 		
-		int new_mat = this.get_material(k + l * _size_x + m * _size_x * _size_y); ///_mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
+		int new_mat = this->get_material(k + l * _size_x + m * _size_x * _size_y); ///_mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
 
 		//std::clog << "   " << new_mat << "   " << start_mat;
 		
