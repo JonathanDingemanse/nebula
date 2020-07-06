@@ -402,13 +402,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 template <bool gpu_flag>
 PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material)
 {
-	std::clog << _size_z;
 	int k = (int) position.x;
 	int l = (int) position.y;
 	int m = (int) position.z;
 
-	
-	//_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 }
 
 template<bool gpu_flag>
