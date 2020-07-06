@@ -176,16 +176,19 @@ struct boundary_intersect
 				if (deposition)
 				{
 					// deposit a voxel of material 0
+					std::clog << "A deposition!!";
+					
+					vec3 dep_pos;
 					if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
 					{
-						auto dep_pos = -0.1 * last_triangle_normal + this_particle.pos; // deposition position
-						geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
-					}
+						dep_pos = -0.1 * last_triangle_normal + this_particle.pos; // deposition position
+											}
 					else if (material_idx_out == material_manager::VACUUM) // electron enters vacuum from material
 					{
-						auto dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
-						geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
+						dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
 					}
+					geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
+
 				}
 
 				// if there is transmission, then adjust the kinetic energy,
