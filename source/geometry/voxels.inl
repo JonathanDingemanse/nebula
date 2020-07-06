@@ -140,7 +140,6 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 {
 	intersect_event evt{ distance, nullptr };
 
-
 	// 
 	real x = start.x / _voxel_size; // create vars for the location elements
 	real y = start.y / _voxel_size;
@@ -311,7 +310,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) { // if there is een intersection, return the intersection event
 
-			//std::clog << "\nintersection from " << start_mat << " to " << new_mat;
+			std::clog << "\nintersection from " << start_mat << " to " << new_mat;
 			
 			evt.isect_distance = delta_s_min * _voxel_size; // set the distance to the intersection
 
