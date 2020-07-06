@@ -442,7 +442,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 {
 	std::ofstream file;
 	file.open(file_name);
-	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _size_z << "\n";
+	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height << "\n";
 
 	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y; i++)
 	{
