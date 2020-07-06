@@ -5,16 +5,18 @@
 namespace nbl { namespace geometry {
 
 template<bool gpu_flag>
-inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry)
+inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry, int max_save_height)
 {
 	_voxel_size = voxel_size;
 	_AABB_min = vec3{ 0, 0, 0 };
 	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
-
 	
 	_size_x = (int)shape.x;
 	_size_y = (int)shape.y;
 	_size_z = (int)shape.z;
+
+	_max_save_height = max_save_height;
+	_min_save_height = max_save_height - 5; // save at least 5 layers of voxels
 	
 	const vec3 m = _AABB_max - _AABB_min;
 	_max_extent = magnitude(m);
@@ -70,7 +72,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	// Add layers of detectors for testing
 	
-	for (int i = 0; i < SIZE_X; i++) {
+	/*for (int i = 0; i < SIZE_X; i++) {
 		for (int j = 0; j < SIZE_Y; j++) {
 			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 8) * SIZE_X * SIZE_Y) = -126;
 		}
@@ -114,7 +116,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	AABB_max += vec3{ 1, 1, 1 };
 	*/
 	
-	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom);
+	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom, SAMPLE_HEIGHT + 1);
 	return geometry;
 }
 
@@ -442,7 +444,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 	file.open(file_name);
 	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _size_z << "\n";
 
-	for(int i = 0; i < _mat_grid.size(); i++)
+	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y; i++)
 	{
 		file << _mat_grid.at(i) << "\t" << _tag_grid.at(i) << "\t" << _e_grid.at(i) << "\t" << _dz_grid.at(i) << "\n";
 	}
