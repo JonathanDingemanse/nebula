@@ -410,13 +410,13 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 template <bool gpu_flag>
 PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_tag, real energy, real dz)
 {
-	int k = (int) position.x;
-	int l = (int) position.y;
-	int m = (int) position.z;
+	int k = (int) position.x / _voxel_size;
+	int l = (int) position.y / _voxel_size;
+	int m = (int) position.z / _voxel_size;
 
 	std::clog << "A deposition at: " << k << "  " << l << "  " << m << "\n";
 
-	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+	_mat_grid[k + l * _size_x + m * _size_x * _size_y] = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
 	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
