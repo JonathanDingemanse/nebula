@@ -414,6 +414,8 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	int l = (int) position.y;
 	int m = (int) position.z;
 
+	std::clog << "A deposition at: " << k << "  " << l << "  " << m << "\n";
+
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
@@ -442,7 +444,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 {
 	std::ofstream file;
 	file.open(file_name);
-	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height << "\n";
+	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height + 1 << "\n";
 
 	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y; i++)
 	{

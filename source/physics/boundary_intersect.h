@@ -176,7 +176,6 @@ struct boundary_intersect
 				if (deposition)
 				{
 					// deposit a voxel of material 0
-					std::clog << "A deposition!!";
 					
 					vec3 dep_pos;
 					if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
