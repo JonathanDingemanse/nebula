@@ -304,7 +304,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}
 		
-		int new_mat = this->get_material(k + l * _size_x + m * _size_x * _size_y); ///_mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
+		int new_mat = voxels::get_material(k + l * _size_x + m * _size_x * _size_y); ///_mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
 
 		//std::clog << "   " << new_mat << "   " << start_mat;
 		
@@ -428,7 +428,7 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 }
 
 template <bool gpu_flag>
-int voxels<gpu_flag>::get_material(int position)
+int voxels<gpu_flag>::get_material(int position) const
 {
 	return _mat_grid[position];
 }
@@ -466,7 +466,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 }
 
 template<bool gpu_flag>
-CPU void voxels<gpu_flag>::set_AABB(vec3 min, vec3 max)
+CPU void voxels<gpu_flag>::set_AABB(vec3 min, vec3 max) 
 {
 	_AABB_min = min;
 	_AABB_max = max;

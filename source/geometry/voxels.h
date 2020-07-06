@@ -92,7 +92,7 @@ public:
 	 * \brief Get the material of a voxel
 	 */
 
-	inline PHYSICS int get_material(int position);
+	inline PHYSICS int get_material(int position) const;
 
 	/**
 	 * \brief Get the maximum distance that can be travelled inside the
