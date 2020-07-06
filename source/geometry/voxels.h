@@ -107,14 +107,14 @@ private:
 	CPU void set_AABB(vec3 min, vec3 max);
 
 	// These vectors are implicit 3D vectors, that represent a voxel grid
-	std::vector<int> _mat_grid; // a voxel grid with nebula material codes. 
+	std::vector<int> _mat_grid = {0, 0}; // a voxel grid with nebula material codes. 
 	//std::vector<int> tag_grid;
 	//std::vector<float> e_grid;
 	//std::vector<float> dz_grid;
-	real _voxel_size; // voxel size in nm
-	int _size_x; // simulation domain size in x direction
-	int _size_y; // .. y direction
-	int _size_z; // .. z direction
+	real _voxel_size = 1; // voxel size in nm
+	int _size_x = 0; // simulation domain size in x direction
+	int _size_y = 0; // .. y direction
+	int _size_z = 0; // .. z direction
 	vec3 _AABB_min       = { 0, 0, 0 };
 	vec3 _AABB_max       = { 0, 0, 0 };
 	real _max_extent     = 0;

@@ -10,7 +10,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 
 	
 	_size_x = (int)shape.x;
-	_size_y = (int)shape.y;;
+	_size_y = (int)shape.y;
 	_size_z = (int)shape.z;
 	
 	const vec3 m = _AABB_max - _AABB_min;
@@ -400,13 +400,15 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 }
 
 template <bool gpu_flag>
-void voxels<gpu_flag>::set_material(vec3 position, int material)
+PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material)
 {
+	std::clog << _size_z;
 	int k = (int) position.x;
 	int l = (int) position.y;
 	int m = (int) position.z;
 
-	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+	
+	//_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 }
 
 template<bool gpu_flag>
