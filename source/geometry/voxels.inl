@@ -17,6 +17,9 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	_max_extent = magnitude(m);
 
 	_mat_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_tag_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_e_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_dz_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 
 		if (initial_geometry.size() != _size_x * _size_y * _size_z)
 		{
@@ -400,13 +403,16 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 }
 
 template <bool gpu_flag>
-PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material)
+PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_tag, real energy, real dz)
 {
 	int k = (int) position.x;
 	int l = (int) position.y;
 	int m = (int) position.z;
 
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag;
+	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
+	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
 }
 
 template<bool gpu_flag>

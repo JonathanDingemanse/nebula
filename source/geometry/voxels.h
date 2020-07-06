@@ -86,7 +86,7 @@ public:
 	 * \param material			 The material to which the voxel will be set
 	 */
 
-	inline PHYSICS void set_material(vec3 position, int material);
+	inline PHYSICS void set_material(vec3 position, int material, int PE_tag, real energy, real dz);
 
 	/**
 	 * \brief Get the maximum distance that can be travelled inside the
@@ -108,9 +108,10 @@ private:
 
 	// These vectors are implicit 3D vectors, that represent a voxel grid
 	std::vector<int> _mat_grid; // a voxel grid with nebula material codes. 
-	//std::vector<int> tag_grid;
-	//std::vector<float> e_grid;
-	//std::vector<float> dz_grid;
+	std::vector<int> _tag_grid; // .. with PE tags
+	std::vector<real> _e_grid; // .. with dissociation energies
+	std::vector<real> _dz_grid;  // .. with dz's
+	
 	real _voxel_size; // voxel size in nm
 	int _size_x; // simulation domain size in x direction
 	int _size_y; // .. y direction
