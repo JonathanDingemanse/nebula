@@ -226,13 +226,15 @@ int main(int argc, char** argv)
 		if (primaries_to_go == 0)
 			break;
 	}
+	timer.stop("Simulation");
 
+	timer.start();
 	geometry.save("final_geometry.vox"); // save the final geometry
 	
 	for (auto& t : threads)
 		t.join();
 
-	timer.stop("Simulation");
+	timer.stop("Save file(s)");
 
 	std::clog << "\n\n";
 	timer.print(std::clog);
