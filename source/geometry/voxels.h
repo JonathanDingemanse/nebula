@@ -89,6 +89,12 @@ public:
 	inline PHYSICS void set_material(vec3 position, int material, int PE_tag, real energy, real dz);
 
 	/**
+	 * \brief Get the material of a voxel
+	 */
+
+	inline PHYSICS int get_material(int position);
+
+	/**
 	 * \brief Get the maximum distance that can be travelled inside the
 	 *        simulation domain.
 	 */
