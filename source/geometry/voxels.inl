@@ -268,10 +268,10 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 		case 0: // intersection with x-plane
 			dx_sgn = dx / std::abs(dx); // determine sign of dx
-			k = (int)std::floor(new_pos.x + 0.001 * dx_sgn); // calculate the indices by flooring the new position plus a
+			k = (int)(new_pos.x + 0.001 * dx_sgn); // calculate the indices by flooring the new position plus a
 			// little inward 
-			l = (int)std::floor(new_pos.y);
-			m = (int)std::floor(new_pos.z);
+			l = (int)(new_pos.y);
+			m = (int)(new_pos.z);
 			
 			if (k >= _size_x || k < 0)
 			{
@@ -281,9 +281,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		case 1: // intersection with y-plane
 			dy_sgn =  dy / std::abs(dy);
-			k = (int)std::floor(new_pos.x);
-			l = (int)std::floor(new_pos.y + 0.001 * dy_sgn);
-			m = (int)std::floor(new_pos.z);
+			k = (int)(new_pos.x);
+			l = (int)(new_pos.y + 0.001 * dy_sgn);
+			m = (int)(new_pos.z);
 			
 			if (l >= _size_y || l < 0)
 			{
@@ -293,9 +293,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		default: // intersection with z-plane
 			dz_sgn = dz / std::abs(dz);
-			k = (int)std::floor(new_pos.x);
-			l = (int)std::floor(new_pos.y);
-			m = (int)std::floor(new_pos.z + 0.001 *dz_sgn);
+			k = (int)(new_pos.x);
+			l = (int)(new_pos.y);
+			m = (int)(new_pos.z + 0.001 *dz_sgn);
 
 			if(m >= _size_z || m < 0)
 			{
@@ -310,7 +310,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) { // if there is een intersection, return the intersection event
 
-			std::clog << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "\n";
+			//std::clog << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "\n";
 			//std::clog << "material at 100 100 299: " << _mat_grid.at(100 + 100 * _size_x + 299 * _size_x * _size_y) << "\n";
 
 			
@@ -415,16 +415,16 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	int l = (int) (position.y / _voxel_size);
 	int m = (int) (position.z / _voxel_size);
 
-	std::clog << "A deposition at: " << k << "  " << l << "  " << m << "\n";
+	//std::clog << "A deposition at: " << k << "  " << l << "  " << m << "\n";
 
-	std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "   ";
+	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "   ";
 
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
 	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
 
-	std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
+	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
 
 	if(m > _max_save_height)
 	{
