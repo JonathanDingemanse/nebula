@@ -174,7 +174,7 @@ struct boundary_intersect
 					{
 
 						// Alman cross - section parameters
-						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
+						const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
 						const real E_MAX = 18; // maximum dissosiation cross - section energy in eV
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max 
@@ -196,22 +196,22 @@ struct boundary_intersect
 
 						if(rng.unit() < deposition_prob)
 						{
-							//deposit things here
-						} */
-						
-						vec3 dep_pos;
-						if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
-						{
-							dep_pos = -0.01 * last_triangle_normal + this_particle.pos; // deposition position
-						}
-						else if (material_idx_out == material_manager::VACUUM) // electron enters vacuum from material
-						{
-							dep_pos = 0.01 * last_triangle_normal + this_particle.pos; // deposition position
-						}
-						geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
+							vec3 dep_pos;
+							if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
+							{
+								dep_pos = -0.01 * last_triangle_normal + this_particle.pos; // deposition position
+							}
+							else if (material_idx_out == material_manager::VACUUM) // electron enters vacuum from material
+							{
+								dep_pos = 0.01 * last_triangle_normal + this_particle.pos; // deposition position
+							}
+							geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
 
-						particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated.
-						return;
+							particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated.
+							return;
+						} 
+						
+						
 					}
 					
 				}
