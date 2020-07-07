@@ -181,17 +181,17 @@ struct boundary_intersect
 
 						real deposition_prob; // the probability of deposition according to the Alman cross-section
 
-						if (E <= E_TH)
+						if (this_particle.kin_energy <= E_TH)
 						{
 							deposition_prob = 0;
 						}	
-						else if (E < E_MAX)
+						else if (this_particle.kin_energy < E_MAX)
 						{
-							deposition_prob = SIGMA_MAX * (1 - ((E_MAX - E) / std::pow(E_MAX - E_TH, 2)) );
+							deposition_prob = SIGMA_MAX * (1 - ((E_MAX - this_particle.kin_energy) / std::pow(E_MAX - E_TH, 2)) );
 						}
 						else
 						{
-							deposition_prob = SIGMA_MAX * std::exp(-(E - E_MAX) / LAMBDA_0);
+							deposition_prob = SIGMA_MAX * std::exp(-(this_particle.kin_energy - E_MAX) / LAMBDA_0);
 						}
 
 						if(rng.unit() < deposition_prob)
