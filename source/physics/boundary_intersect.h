@@ -165,13 +165,6 @@ struct boundary_intersect
 				: 1);
 			if (rng.unit() < T)
 			{
-				if (interface_refraction)
-				{
-					// determine the angle of refraction
-					// see thesis T.V. Eq. 3.139
-					this_particle.dir = (normalised_dir - last_triangle_normal*cos_theta)
-						+ s * last_triangle_normal * cos_theta;
-				}
 
 				if (deposition)
 				{
@@ -184,7 +177,7 @@ struct boundary_intersect
 						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
 						const real E_MAX = 18; // maximum dissosiation cross - section energy in eV
 						const real LAMBDA_0 = 77; // lambda_0 in eV
-						const real SIGMA_MAX = 1; // simga_max in voxels
+						const real SIGMA_MAX = 1; // sigma_max 
 
 						real deposition_prob; // the probability of deposition according to the Alman cross-section
 
@@ -216,8 +209,19 @@ struct boundary_intersect
 							dep_pos = 0.01 * last_triangle_normal + this_particle.pos; // deposition position
 						}
 						geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
+
+						particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated.
+						return;
 					}
 					
+				}
+
+				if (interface_refraction)
+				{
+					// determine the angle of refraction
+					// see thesis T.V. Eq. 3.139
+					this_particle.dir = (normalised_dir - last_triangle_normal * cos_theta)
+						+ s * last_triangle_normal * cos_theta;
 				}
 
 				// if there is transmission, then adjust the kinetic energy,
