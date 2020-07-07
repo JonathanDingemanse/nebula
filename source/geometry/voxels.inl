@@ -141,20 +141,20 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	intersect_event evt{ distance, nullptr };
 
 	// 
-	real x = start.x / _voxel_size; // create vars for the location elements
-	real y = start.y / _voxel_size;
-	real z = start.z / _voxel_size;
+	const real x = start.x / _voxel_size; // create vars for the location elements
+	const real y = start.y / _voxel_size;
+	const real z = start.z / _voxel_size;
 	
-	real dx = direction.x; // create vars for the direction elements
-	real dy = direction.y;
-	real dz = direction.z;
+	const real dx = direction.x; // create vars for the direction elements
+	const real dy = direction.y;
+	const real dz = direction.z;
 
-	vec3 dr = { dx, dy, dz };
+	const vec3 dr = { dx, dy, dz };
 	vec3 delta_S = { 0, 0, 0 };
 
 	real delta_s_min = distance / _voxel_size; // holds the shortest pathlength to an intersection
 
-	int start_mat = ignore_material;
+	const int start_mat = ignore_material;
 
 	// calculate the distances to the first planes in the 3 dimensions
 	real delta_x;	// delta_x is the distance (perpendicular to the plane) to the next plane in the x direction
@@ -257,9 +257,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		int l;
 		int m;
 
-		real dx_sgn = 0; // signs of dx, dy and dz
-		real dy_sgn = 0;
-		real dz_sgn = 0;
+		real dx_sgn; // signs of dx, dy and dz
+		real dy_sgn;
+		real dz_sgn;
 		
 		//std::clog << "\n" << dx_sgn << "   " << dy_sgn << "   " << dz_sgn;
 
