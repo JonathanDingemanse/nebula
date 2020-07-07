@@ -425,6 +425,15 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
 
 	std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
+
+	if(m > _max_save_height)
+	{
+		_max_save_height = m;
+	}
+	else if (m < _min_save_height)
+	{
+		_min_save_height = m;
+	}
 }
 
 template <bool gpu_flag>
