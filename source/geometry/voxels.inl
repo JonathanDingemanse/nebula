@@ -252,7 +252,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			min_index = 2;
 		}
 		
-		if (z > _size_z) { std::clog << "   " << min_index << "   " << distance / _voxel_size << "   " << z << "\n"; }
+		
 		
 		const int min_i = min_index; // store min_index in a constant
 
@@ -320,6 +320,12 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 				return evt;
 			}
 			break;
+		}
+
+		if (z > _size_z)
+		{
+			std::clog << "   " << min_index << "   " << distance / _voxel_size << "   " << z << "\n";
+			std::clog << "   " << k << "   " << l << "   " << m << "\n";
 		}
 		
 		int new_mat = _mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
