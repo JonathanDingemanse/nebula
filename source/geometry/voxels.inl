@@ -5,11 +5,11 @@
 namespace nbl { namespace geometry {
 
 template<bool gpu_flag>
-inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry, int max_save_height)
+inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> initial_geometry, int max_save_height, real sim_depth)
 {
 	_voxel_size = voxel_size;
 	_AABB_min = vec3{ 0, 0, 0 };
-	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
+	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size  + sim_depth };
 	
 	_size_x = (int)shape.x;
 	_size_y = (int)shape.y;
@@ -31,7 +31,6 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 			//throw std::invalid_argument("initial geometry of wrong shape");
 			std::clog << "Warning: initial geometry of wrong shape\n";
 		}
-
 	
 	_mat_grid = initial_geometry;
 }
@@ -44,8 +43,9 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	const int SIZE_X = 201; // horizontal size in the x direction in voxels
 	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
 	const int SIZE_Z = 700; // vertical size in voxels
+	const real SIM_DEPTH = 150; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
 
-	const int SAMPLE_HEIGHT = 300; // height of the sample (length between the sample and the top of the simulation domain) in voxels
+	const int SAMPLE_HEIGHT = 699; // height of the sample (length between the sample and the top of the simulation domain) in voxels
 	
 	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
@@ -116,7 +116,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	AABB_max += vec3{ 1, 1, 1 };
 	*/
 	
-	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom, SAMPLE_HEIGHT + 1);
+	voxels<false> geometry(VOXEL_SIZE, shape, ini_geom, SAMPLE_HEIGHT + 1, SIM_DEPTH);
 	return geometry;
 }
 
@@ -148,6 +148,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	const real dx = direction.x; // create vars for the direction elements
 	const real dy = direction.y;
 	const real dz = direction.z;
+
+	if(z + dz*distance > _size_z) // if the electron is under the voxels and it cannot leave it, return the distance-null event
+	{
+		return evt;
+	}
 
 	const vec3 dr = { dx, dy, dz };
 	vec3 delta_S = { 0, 0, 0 };
@@ -199,7 +204,15 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		delta_S.z = distance / _voxel_size;
 	}
 
-	while (distance / _voxel_size >= delta_s_min) { 
+	if(z >= _size_z)
+	{
+		delta_S.z = z / dz; // the distance to the z=0 plane is z / (1/dz)
+
+		delta_S.x = std::ceil((((z - _size_z) / dz) - delta_S.x) * dx) + delta_S.x; // calculate distances to the first intersections with x and y planes 
+		delta_S.y = std::ceil((((z - _size_z) / dz) - delta_S.y) * dy) + delta_S.y; //   such that z > 0
+	}
+
+	while (distance / _voxel_size >= delta_s_min) {
 
 		//std::clog << "\n" << delta_s_min ;
 
@@ -485,7 +498,7 @@ CPU void voxels<gpu_flag>::set_AABB(vec3 min, vec3 max)
 }
 
 
-namespace detail
+/*namespace detail
 {
 	template<>
 	struct voxels_factory<false>
@@ -496,7 +509,7 @@ namespace detail
 			using triangle_index_t = voxels_t::triangle_index_t;
 
 			std::vector<int> a;
-			voxels_t geometry(3, {5, 5, 6}, a, 9);
+			voxels_t geometry(3, {5, 5, 6}, a, 9, 9);
 
 			
 			/*if (triangles.size() > std::numeric_limits<triangle_index_t>::max())
@@ -507,7 +520,7 @@ namespace detail
 			for (triangle_index_t i = 0; i < triangles.size(); ++i)
 			{
 				geometry._triangles[i] = triangles[i];
-			}*/
+			}
 
 			//geometry.set_AABB(AABB_min, AABB_max);
 
@@ -563,4 +576,8 @@ namespace detail
 #endif // CUDA_COMPILER_AVAILABLE
 } // namespace detail
 
+*/
+
 }} // namespace nbl::geometry
+
+
