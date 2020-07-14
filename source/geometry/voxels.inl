@@ -208,12 +208,12 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	
 	if(z >= _size_z)
 	{
-		delta_S.z = z / dz; // the distance to the z=0 plane is z / (1/dz)
+		delta_S.z = (z - _size_z) / -dz; // the distance to the z=0 plane is z / (1/dz)
 
-		delta_S.x = std::ceil((((z - _size_z) / dz) - delta_S.x) * dx) + delta_S.x; // calculate distances to the first intersections with x and y planes 
-		delta_S.y = std::ceil((((z - _size_z) / dz) - delta_S.y) * dy) + delta_S.y; //   such that z > 0
+		delta_S.x = std::ceil((((z - _size_z) / -dz) - delta_S.x) * dx) + delta_S.x; // calculate distances to the first intersections with x and y planes 
+		delta_S.y = std::ceil((((z - _size_z) / -dz) - delta_S.y) * dy) + delta_S.y; //   such that z > 0
 
-		std::clog << delta_S.x << "   " << delta_S.y << delta_S.z << "\n";
+		std::clog << delta_S.x << "   " << delta_S.y << "   " << delta_S.z << "\n";
 	}
 
 	while (distance / _voxel_size >= delta_s_min) {
