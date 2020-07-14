@@ -252,7 +252,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			min_index = 2;
 		}
 
-		//std::clog << "   " << min_index << "   " << distance / _voxel_size;
+		std::clog << "   " << min_index << "   " << distance / _voxel_size;
 		const int min_i = min_index; // store min_index in a constant
 
 		vec3 new_pos = start / _voxel_size + (delta_s_min /*+ 0.001*/) * dr; // new position if there is an intersection in voxels
