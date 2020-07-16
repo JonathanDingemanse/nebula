@@ -233,7 +233,6 @@ struct boundary_intersect
 				if(material_idx_out == material_manager::VACUUM)
 				{
 					particle_mgr.set_species(particle_idx, 3); // VE
-					std::clog << "VE ";
 				}
 				
 				particle_mgr[particle_idx] = this_particle;
