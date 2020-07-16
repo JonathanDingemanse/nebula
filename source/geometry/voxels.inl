@@ -45,10 +45,10 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	const int SIZE_X = 201; // horizontal size in the x direction in voxels
 	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
-	const int SIZE_Z = 700; // vertical size in voxels
-	const real SIM_DEPTH = 150; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
+	const int SIZE_Z = 900; // vertical size in voxels
+	const real SIM_DEPTH = 500; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
 
-	const int SAMPLE_HEIGHT = 350; // height of the sample (length between the sample and the top of the simulation domain) in voxels
+	const int SAMPLE_HEIGHT = 500; // height of the sample (length between the sample and the top of the simulation domain) in voxels
 	
 	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
@@ -492,7 +492,6 @@ inline PHYSICS vec3 voxels<gpu_flag>::AABB_max() const
 template <bool gpu_flag>
 void voxels<gpu_flag>::save(const std::string file_name)
 {
-	std::clog << "help \n";
 	std::ofstream file;
 	file.open(file_name);
 	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height + 1 << "\n";
