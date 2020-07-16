@@ -55,6 +55,9 @@ public:
 	// Get electron species
 	inline PHYSICS uint8_t get_species(particle_index_t i) const;
 
+	// set electron species
+	inline PHYSICS void set_species(particle_index_t i, uint8_t species) const;
+
 	// Get last intersected triangle for a particle (or nullptr)
 	inline PHYSICS triangle const * get_last_triangle(particle_index_t i) const;
 	inline PHYSICS void forget_last_triangle(particle_index_t i);

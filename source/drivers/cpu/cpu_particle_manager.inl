@@ -172,6 +172,13 @@ PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_inde
 }
 
 template<typename material_manager_t>
+PHYSICS auto cpu_particle_manager<material_manager_t>::set_species(particle_index_t i, uint8_t species) const
+-> void
+{
+	particles[i].species = species;
+}
+
+template<typename material_manager_t>
 PHYSICS triangle const * cpu_particle_manager<material_manager_t>::get_last_triangle(
 	particle_index_t i) const
 {
@@ -208,20 +215,24 @@ PHYSICS void cpu_particle_manager<material_manager_t>::create_secondary(
 
 	particle PE = particles[primary_idx].particle_data;
 
-	if (particles[primary_idx].secondary_tag == 0)
+	if (particles[primary_idx].species == 0)
 	{
-		if (PE.dir.z > 0.999)
+		if (PE.dir.z > 0.99999)
 		{
-			species = 4; // PE
+			species = 4; // SE_PE
 		}
 		else if (PE.dir.z > 0)
 		{
-			species = 5; // FSE
+			species = 5; // SE_FSE
 		}
 		else
 		{
-			species = 6; // BSE
+			species = 6; // SE_BSE
 		}
+	}
+	else if (particles[primary_idx].species == 3)
+	{
+		species = 7; //SE_VE
 	}
 	else
 	{
