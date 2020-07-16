@@ -53,10 +53,10 @@ public:
 	inline PHYSICS primary_tag_t get_primary_tag(particle_index_t i) const;
 
 	// Get electron species
-	inline PHYSICS uint8_t get_species(particle_index_t i) const;
+	inline PHYSICS uint8_t get_species(particle_index_t i);
 
 	// set electron species
-	inline PHYSICS void set_species(particle_index_t i, uint8_t species) const;
+	inline PHYSICS void set_species(particle_index_t i, uint8_t species);
 
 	// Get last intersected triangle for a particle (or nullptr)
 	inline PHYSICS triangle const * get_last_triangle(particle_index_t i) const;

@@ -151,7 +151,7 @@ PHYSICS auto cpu_particle_manager<material_manager_t>::get_primary_tag(particle_
 }
 
 template<typename material_manager_t>
-PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_index_t i) const
+PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_index_t i)
 -> uint8_t
 {
 	if(particles[i].species != 0)
@@ -172,7 +172,7 @@ PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_inde
 }
 
 template<typename material_manager_t>
-PHYSICS auto cpu_particle_manager<material_manager_t>::set_species(particle_index_t i, uint8_t species) const
+PHYSICS auto cpu_particle_manager<material_manager_t>::set_species(particle_index_t i, uint8_t species)
 -> void
 {
 	particles[i].species = species;
