@@ -34,7 +34,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	
 	_mat_grid = initial_geometry;
 
-	std::clog << "HELP";
+	
 }
 
 template<bool gpu_flag>
@@ -491,6 +491,7 @@ inline PHYSICS vec3 voxels<gpu_flag>::AABB_max() const
 template <bool gpu_flag>
 void voxels<gpu_flag>::save(const std::string file_name)
 {
+	std::clog << "HELP";
 	std::ofstream file;
 	file.open(file_name);
 	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height + 1 << "\n";
