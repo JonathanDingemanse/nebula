@@ -33,6 +33,8 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 		}
 	
 	_mat_grid = initial_geometry;
+
+	std::clog << "HELP";
 }
 
 template<bool gpu_flag>
