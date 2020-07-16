@@ -86,7 +86,7 @@ public:
 	 * \param material			 The material to which the voxel will be set
 	 */
 
-	inline PHYSICS void set_material(vec3 position, int material, int PE_tag, real energy, real dz);
+	inline PHYSICS void set_material(vec3 position, int material, int PE_tag, real energy, uint8_t species);
 
 	/**
 	 * \brief Get the material of a voxel
@@ -122,6 +122,7 @@ private:
 	std::vector<int> _tag_grid; // .. with PE tags
 	std::vector<real> _e_grid; // .. with dissociation energies
 	std::vector<real> _dz_grid;  // .. with dz's
+	std::vector<real> _species_grid;  // .. with electron species 
 	
 	real _voxel_size; // voxel size in nm
 	int _size_x; // simulation domain size in x direction in voxels

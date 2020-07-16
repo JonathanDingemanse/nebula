@@ -25,6 +25,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	_tag_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 	_e_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 	_dz_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_species_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 
 		if (initial_geometry.size() != _size_x * _size_y * _size_z)
 		{
@@ -438,7 +439,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 }
 
 template <bool gpu_flag>
-PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_tag, real energy, real dz)
+PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_tag, real energy, uint8_t species)
 {
 	int k = (int) (position.x / _voxel_size);
 	int l = (int) (position.y / _voxel_size);
@@ -451,7 +452,7 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
-	_dz_grid.at(k + l * _size_x + m * _size_x * _size_y) = dz;
+	_species_grid.at(k + l * _size_x + m * _size_x * _size_y) = species;
 
 	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
 
@@ -498,7 +499,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 
 	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y; i++)
 	{
-		file << _mat_grid.at(i) << "\t" << _tag_grid.at(i) << "\t" << _e_grid.at(i) << "\t" << _dz_grid.at(i) << "\n";
+		file << _mat_grid.at(i) << "\t" << _tag_grid.at(i) << "\t" << _e_grid.at(i) << "\t" << _species_grid.at(i) << "\n";
 	}
 	
 	file.close();

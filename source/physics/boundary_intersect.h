@@ -205,7 +205,7 @@ struct boundary_intersect
 							{
 								dep_pos = 0.01 * last_triangle_normal + this_particle.pos; // deposition position
 							}
-							geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, this_particle.dir.z);
+							geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated.
 							return;
