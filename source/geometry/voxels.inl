@@ -9,7 +9,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 {
 	_voxel_size = voxel_size;
 	_AABB_min = vec3{ 0, 0, 0 };
-	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size  + sim_depth };
+	_AABB_max = vec3{ shape.x * voxel_size, shape.y * voxel_size, shape.z * voxel_size };
 	
 	_size_x = (int)shape.x;
 	_size_y = (int)shape.y;
@@ -322,14 +322,14 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			break;
 		}
 
-		if (z > _size_z)
+		/*if (z > _size_z)
 		{
 			std::clog << "   (x,y,z): " << x << "   " << y << "   " << z << "\n";
 			std::clog << "   (dx,dy,dz): " << dx << "   " << dy << "   " << dz << "\n";
 			std::clog << "   (face, dist): " << min_index << "   " << distance / _voxel_size << "\n";
 			std::clog << "   new_pos(x,y,z): " << new_pos.x << "   " << new_pos.y << "   " << new_pos.z << "\n";
 			std::clog << "   (k,l,m): " << k << "   " << l << "   " << m << "\n";
-		}
+		}*/
 		
 		int new_mat = _mat_grid[k + l * _size_x + m * _size_x * _size_y]; // determine material using the material indices
 
