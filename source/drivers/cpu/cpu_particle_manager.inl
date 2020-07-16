@@ -159,7 +159,7 @@ PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_inde
 		return particles[i].species;
 	}
 
-	if(particles[i].particle_data.dir.z == 0)
+	if(particles[i].particle_data.dir.z < 0.99999)
 	{
 		return 0; // PE
 	}
