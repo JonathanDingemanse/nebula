@@ -149,14 +149,10 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	const real dy = direction.y;
 	const real dz = direction.z;
 
-	if(z + dz*distance > _size_z) // if the electron is under the voxels and it cannot leave it, return the distance-null event
+	/*if(z + dz*distance > _size_z) // if the electron is under the voxels and it cannot leave it, return the distance-null event
 	{
 		return evt;
-	}
-	else if(z >= _size_z)
-	{
-		
-	}
+	}*/
 
 	const vec3 dr = { dx, dy, dz };
 	vec3 delta_S = { 0, 0, 0 };
@@ -210,7 +206,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 	
 	
-	if(z >= _size_z)
+	/*if(z >= _size_z)
 	{
 		delta_S.z = (z - _size_z) / -dz; // the distance to the z=0 plane is z / (1/dz)
 
@@ -218,7 +214,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		delta_S.y = std::ceil((((z - _size_z) / -dz) - delta_S.y) * std::abs(dx)) / std::abs(dy) + delta_S.y; //   such that z > 0
 
 		std::clog << delta_S.x << "   " << delta_S.y << "   " << delta_S.z << "\n";
-	}
+	}*/
 
 	while (distance / _voxel_size >= delta_s_min) {
 
