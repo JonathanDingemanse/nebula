@@ -496,7 +496,7 @@ void voxels<gpu_flag>::save(const std::string file_name)
 	file.open(file_name);
 	file << _voxel_size << "\t" << _size_x << "\t" << _size_y << "\t" << _max_save_height - _min_save_height + 1 << "\n";
 
-	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y; i++)
+	for(int i = _min_save_height * _size_x * _size_y; i < (_max_save_height + 1) * _size_x * _size_y -1; i++)
 	{
 		std::clog << i << "\r";
 		file << _mat_grid.at(i) << "\t" << _tag_grid.at(i) << "\t" << _e_grid.at(i) << "\t" << _dz_grid.at(i) << "\n";
