@@ -210,7 +210,7 @@ PHYSICS void cpu_particle_manager<material_manager_t>::create_secondary(
 
 	if (particles[primary_idx].secondary_tag == 0)
 	{
-		if (PE.dir.z == 1)
+		if (PE.dir.z > 0.999)
 		{
 			species = 4; // PE
 		}
