@@ -26,7 +26,7 @@ struct boundary_intersect
 	 */
 	nbl::geometry::voxels<false>* geometry;
 
-	const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
+	
 	
 	static void print_info(std::ostream& stream)
 	{
@@ -177,7 +177,7 @@ struct boundary_intersect
 					if(material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
 					{
 						const real E = this_particle.kin_energy;
-						 
+						const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
 						
 						// Alman cross section 
 						const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
