@@ -25,6 +25,8 @@ struct boundary_intersect
 	 * \brief Print diagnostic info
 	 */
 	nbl::geometry::voxels<false>* geometry;
+
+	const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
 	
 	static void print_info(std::ostream& stream)
 	{
@@ -165,7 +167,9 @@ struct boundary_intersect
 				: 1);
 			if (rng.unit() < T)
 			{
-
+				// if there is transmission, then adjust the kinetic energy,
+				this_particle.kin_energy += dU;
+				
 				if (deposition)
 				{
 					// deposit a voxel of material 0
@@ -173,6 +177,7 @@ struct boundary_intersect
 					if(material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
 					{
 						const real E = this_particle.kin_energy;
+						 
 						
 						// Alman cross section 
 						const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
@@ -233,8 +238,10 @@ struct boundary_intersect
 							}
 							geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
-							particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated.
-							return;
+							this_particle.kin_energy -= dissociation_energy;
+							
+							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is not terminated anymore :)
+							
 						} 
 						
 						
@@ -249,11 +256,9 @@ struct boundary_intersect
 					this_particle.dir = (normalised_dir - last_triangle_normal * cos_theta)
 						+ s * last_triangle_normal * cos_theta;
 				}
-
-				// if there is transmission, then adjust the kinetic energy,
-				// update the current material index and EXIT.
-				this_particle.kin_energy += dU;
 				
+				// update the current material index and EXIT.
+								
 				particle_mgr.set_material_index(particle_idx, material_idx_out);
 
 				if(material_idx_out == material_manager::VACUUM)
