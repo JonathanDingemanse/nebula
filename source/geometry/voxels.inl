@@ -152,6 +152,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	const real dy = direction.y;
 	const real dz = direction.z;
 
+	if(dz > 1)
+	{
+		std::clog << "\r  something weird just happened:  " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       \n";
+	}
+	
 	std::clog << "\r                      " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       ";
 
 	/*if(z + dz*distance > _size_z) // if the electron is under the voxels and it cannot leave it, return the distance-null event
