@@ -151,11 +151,6 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 	const real dx = direction.x; // create vars for the direction elements
 	const real dy = direction.y;
 	const real dz = direction.z;
-
-	if(dz > 1)
-	{
-		std::clog << "\r  something weird just happened:  " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       \n";
-	}
 	
 	std::clog << "\r                      " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       ";
 
@@ -226,8 +221,13 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		std::clog << delta_S.x << "   " << delta_S.y << "   " << delta_S.z << "\n";
 	}*/
 
-	while (distance / _voxel_size >= delta_s_min) {
+	int test_vastlopen = 0;
 
+	while (distance / _voxel_size >= delta_s_min) {
+		if(test_vastlopen++ == 1000)
+		{
+			std::clog << "\r  vastgelopen:  " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       \n";
+		}
 		//std::clog << "\n" << delta_s_min ;
 
 		// Determine minimum path length from delta_S
