@@ -209,6 +209,18 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		delta_S.z = distance / _voxel_size;
 	}
 
+	if (delta_S.x < 0.000001)
+	{
+		delta_S.x += std::abs(1 / dx); // add one path length between two planes to delta_S.x
+	}
+	if (delta_S.y < 0.000001)
+	{
+		delta_S.y += std::abs(1 / dy);
+	}
+	if (delta_S.z < 0.000001)
+	{
+		delta_S.z += std::abs(1 / dz);
+	}
 	
 	
 	/*if(z >= _size_z)
@@ -233,7 +245,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		// Determine minimum path length from delta_S
 		delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z);
 
-		if(delta_s_min < 0.000001) // handle the case that delta_s_min is zero, which is typically the case after an intersection
+		/*if(delta_s_min < 0.000001) // handle the case that delta_s_min is zero, which is typically the case after an intersection
 		{
 			//std::clog << "\n0 in delta_s_min " << delta_S.x << "  " << delta_S.y << "  " << delta_S.z;
 			if(delta_S.x < 0.000001)
@@ -249,7 +261,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 				delta_S.z += std::abs(1 / dz);
 			}
 			delta_s_min = std::min(std::min(delta_S.x, delta_S.y), delta_S.z); // and determine the minimum again
-		}
+		}*/
 
 		int min_index = 0; // min_index is 0 for een intersection with the x-plane, 1 for an intersection with the y-plane
 		//and 2 for an intersection with the z-plane
@@ -261,7 +273,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 			min_index = 2;
 		}
-		std::clog << (delta_s_min - delta_S.y < 0.00000001) << "\r";
+		std::clog << (delta_s_min - delta_S.y) << "\r";
 		
 		
 		const int min_i = min_index; // store min_index in a constant
