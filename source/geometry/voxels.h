@@ -121,7 +121,7 @@ private:
 	std::vector<int> _mat_grid; // a voxel grid with nebula material codes. 
 	std::vector<int> _tag_grid; // .. with PE tags
 	std::vector<real> _e_grid; // .. with dissociation energies
-	std::vector<real> _dz_grid;  // .. with dz's
+	//std::vector<real> _dz_grid;  // .. with dz's
 	std::vector<real> _species_grid;  // .. with electron species 
 	
 	real _voxel_size; // voxel size in nm

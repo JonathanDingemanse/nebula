@@ -24,7 +24,7 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	_mat_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 	_tag_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 	_e_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
-	_dz_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	//_dz_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 	_species_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
 
 		if (initial_geometry.size() != _size_x * _size_y * _size_z)
