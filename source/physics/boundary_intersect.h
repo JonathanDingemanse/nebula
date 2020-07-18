@@ -90,8 +90,8 @@ struct boundary_intersect
 			last_triangle_normal = { 0, 0, -1 };
 			break;
 			
-		//default:	
-			//throw std::runtime_error("Invalid voxel side number!!!");
+		default:	
+			throw std::runtime_error("Invalid voxel side number!!!");
 		}
 
 		// Get angle between direction of motion and triangle
