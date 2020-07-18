@@ -353,7 +353,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) { // if thcere is een intersection, return the intersection event
 
-			//std::clog << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "\n";
+			std::clog << "\r" << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "    ";
 			//std::clog << "material at 100 100 299: " << _mat_grid.at(100 + 100 * _size_x + 299 * _size_x * _size_y) << "\n";
 
 			
