@@ -253,7 +253,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		int min_index = 0; // min_index is 0 for een intersection with the x-plane, 1 for an intersection with the y-plane
 		//and 2 for an intersection with the z-plane
-		if(delta_s_min == delta_S.y)
+		if(delta_s_min - delta_S.y < 0.0000001)
 		{
 			min_index = 1;
 		}
