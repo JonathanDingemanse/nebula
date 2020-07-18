@@ -273,7 +273,12 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 			min_index = 2;
 		}
-		std::clog << (delta_s_min - delta_S.y) << "\r";
+
+		if((delta_s_min - delta_S.y) < 0.001)
+		{
+			std::clog << (delta_s_min - delta_S.y) << "\r";
+		}
+		
 		
 		
 		const int min_i = min_index; // store min_index in a constant
