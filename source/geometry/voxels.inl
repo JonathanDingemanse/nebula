@@ -233,13 +233,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		std::clog << delta_S.x << "   " << delta_S.y << "   " << delta_S.z << "\n";
 	}*/
 
-	int test_vastlopen = 0;
 
 	while (distance / _voxel_size >= delta_s_min) {
-		if(test_vastlopen++ == 1000)
-		{
-			std::clog << "\r  vastgelopen:  " << x << "  " << y << "  " << z << "  " << dx << "  " << dy << "  " << dz << "                       \n";
-		}
+		
 		//std::clog << "\n" << delta_s_min ;
 
 		// Determine minimum path length from delta_S
@@ -273,17 +269,6 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 			min_index = 2;
 		}
-
-		if(std::abs(delta_s_min - delta_S.y) < 0.00001 && delta_s_min != delta_S.y)
-		{
-			std::clog << "\n" << (delta_s_min - delta_S.y)*100000;
-		}
-		else if (std::abs(delta_s_min - delta_S.z) < 0.00001 && delta_s_min != delta_S.z)
-		{
-			std::clog << "\n" << (delta_s_min - delta_S.z) * 100000;
-		}
-		
-		
 		
 		const int min_i = min_index; // store min_index in a constant
 
@@ -298,6 +283,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 			//std::clog << "\n exit";
 			return evt;
+		}
+
+		if(min_i == 0 && new_pos.x - (int)new_pos.x !=0)
+		{
+			std::clog << "\n something is wrong here:  " << new_pos.x;
 		}
 
 		//std::clog << "\nposition: " << new_pos.x << "  " << new_pos.y << "  " << new_pos.z;
