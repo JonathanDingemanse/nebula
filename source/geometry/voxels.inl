@@ -496,17 +496,17 @@ void voxels<gpu_flag>::deposit(vec3 position, vec3 normal, int material, int PE_
 {
 	vec3 pos = position / _voxel_size + 0.1 * normal;
 	
-	int k = (int)pos.x;
-	int l = (int)pos.y;
-	int m = (int)pos.z;
+	int k = static_cast<int>(std::floor(pos.x));
+	int l = static_cast<int>(std::floor(pos.y));
+	int m = static_cast<int>(std::floor(pos.z));
 
 	if (_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
 	{
 		pos = position / _voxel_size - 0.1 * normal;
 
-		k = (int)pos.x;
-		l = (int)pos.y;
-		m = (int)pos.z;
+		k = static_cast<int>(std::floor(pos.x));
+		l = static_cast<int>(std::floor(pos.y));
+		m = static_cast<int>(std::floor(pos.z));
 	}
 	if (_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
 	{
