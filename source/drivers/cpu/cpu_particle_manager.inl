@@ -159,7 +159,7 @@ PHYSICS auto cpu_particle_manager<material_manager_t>::get_species(particle_inde
 		return particles[i].species;
 	}
 
-	if(particles[i].particle_data.dir.z < 0.99)
+	if(particles[i].particle_data.dir.z < 0.999)
 	{
 		return 0; // PE
 	}
@@ -217,7 +217,7 @@ PHYSICS void cpu_particle_manager<material_manager_t>::create_secondary(
 
 	if (particles[primary_idx].species == 0)
 	{
-		if (PE.dir.z > 0.99)
+		if (PE.dir.z > 0.999)
 		{
 			species = 4; // SE_PE
 		}
