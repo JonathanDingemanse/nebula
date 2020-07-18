@@ -485,6 +485,41 @@ int voxels<gpu_flag>::get_material(int position) const
 	return _mat_grid[position];
 }
 
+template <bool gpu_flag>
+void voxels<gpu_flag>::deposit(vec3 position, vec3 normal, int material, int PE_tag, real energy, uint8_t species)
+{
+	vec3 pos = position / _voxel_size + 0.1 * normal;
+	
+	int k = (int)pos.x;
+	int l = (int)pos.y;
+	int m = (int)pos.z;
+
+	if (_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
+	{
+		vec3 pos = position / _voxel_size - 0.1 * normal;
+
+		int k = (int)pos.x;
+		int l = (int)pos.y;
+		int m = (int)pos.z;
+	}
+
+	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
+	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
+	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
+	_species_grid.at(k + l * _size_x + m * _size_x * _size_y) = species + 1;
+
+	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
+
+	if (m > _max_save_height)
+	{
+		_max_save_height = m;
+	}
+	else if (m < _min_save_height)
+	{
+		_min_save_height = m;
+	}
+}
+
 template<bool gpu_flag>
 PHYSICS real voxels<gpu_flag>::get_max_extent() const
 {

@@ -95,6 +95,12 @@ public:
 	inline PHYSICS int get_material(int position) const;
 
 	/**
+	 * \brief Deposit at position position
+	 */
+
+	inline PHYSICS void deposit(vec3 position, vec3 normal, int material, int PE_tag, real energy, uint8_t species);
+
+	/**
 	 * \brief Get the maximum distance that can be travelled inside the
 	 *        simulation domain.
 	 */

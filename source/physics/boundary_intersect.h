@@ -228,7 +228,7 @@ struct boundary_intersect
 						
 						if(rng.unit() < deposition_prob)
 						{
-							vec3 dep_pos;
+							/*vec3 dep_pos;
 							if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
 							{
 								dep_pos = -0.1 * last_triangle_normal + this_particle.pos; // deposition position
@@ -236,8 +236,8 @@ struct boundary_intersect
 							else if (material_idx_out == material_manager::VACUUM) // electron enters vacuum from material
 							{
 								dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
-							}
-							geometry->set_material(dep_pos, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
+							}*/
+							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							this_particle.kin_energy -= dissociation_energy;
 							
