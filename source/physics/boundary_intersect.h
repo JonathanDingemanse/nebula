@@ -180,7 +180,7 @@ struct boundary_intersect
 						const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
 						
 						// Alman cross section 
-						const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
+						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
 						const real E_MAX = 18; // maximum dissosiation cross - section energy in eV
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max
@@ -198,7 +198,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = SIGMA_MAX * std::exp(-(this_particle.kin_energy - E_MAX) / LAMBDA_0);
-						}
+						}*/
 
 						// Winters cross section
 						/*const real E_MAX_w = 100;
@@ -212,18 +212,18 @@ struct boundary_intersect
 						}*/
 
 						// Smith cross section
-						/*if (E < 7)
+						if (E < 7)
 						{
 							deposition_prob = 0;
 						}
 						else if (E < 100)
 						{
-							deposition_prob = (1110 * (1 - 1 / E) + -978.7 * std::pow((1 - 1 / E), 2) + -14.42 * std::log(E) + -733.1 * std::log(E) / E) / E;
+							deposition_prob = (1208 * (1 - 1 / E) + -1064 * std::pow((1 - 1 / E), 2) + -15.68 * std::log(E) + -797.4 * std::log(E) / E) / E;
 						}
 						else
 						{
-							deposition_prob = (-15210 * (1 - 1 / E) + 14680 * std::pow( (1 - 1 / E),2) + 100 * std::log(E) + 5411 * std::log(E) / E) / E;
-						}*/
+							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow( (1 - 1 / E),2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
+						}
 						
 						if(rng.unit() < deposition_prob)
 						{
