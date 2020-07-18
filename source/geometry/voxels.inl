@@ -459,7 +459,7 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
 	_tag_grid.at(k + l * _size_x + m * _size_x * _size_y) = PE_tag + 1; // PE_tag begins at 0, so we add 1 to distinguish the deposition from the first electron from the non-deposits
 	_e_grid.at(k + l * _size_x + m * _size_x * _size_y) = energy;
-	_species_grid.at(k + l * _size_x + m * _size_x * _size_y) = species;
+	_species_grid.at(k + l * _size_x + m * _size_x * _size_y) = species + 1;
 
 	//std::clog << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << "\n";
 
