@@ -285,11 +285,6 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			return evt;
 		}
 
-		if(min_i == 0 && new_pos.x - (int)new_pos.x !=0)
-		{
-			std::clog << "\n something is wrong here:  " << new_pos.x;
-		}
-
 		//std::clog << "\nposition: " << new_pos.x << "  " << new_pos.y << "  " << new_pos.z;
 
 		int k; // indices of the material grid
