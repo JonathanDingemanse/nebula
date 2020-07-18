@@ -237,6 +237,9 @@ struct boundary_intersect
 							{
 								dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
 							}*/
+							
+							std::clog << "\r" << this_particle.pos.x << "   " << this_particle.pos.y << "   " << this_particle.pos.z << "   " << voxel_side;
+ 
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							this_particle.kin_energy -= dissociation_energy;

@@ -510,7 +510,8 @@ void voxels<gpu_flag>::deposit(vec3 position, vec3 normal, int material, int PE_
 	}
 	if (_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
 	{
-		std::clog << "\n deposition inside material:  " << _tag_grid.at(k + l * _size_x + m * _size_x * _size_y) << "   " << PE_tag;
+		//std::clog << "\n deposition inside material:  " << _tag_grid.at(k + l * _size_x + m * _size_x * _size_y) << "   " << PE_tag;
+		std::clog << "\n";
 		return;
 	}
 
