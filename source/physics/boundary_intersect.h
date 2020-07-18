@@ -178,6 +178,7 @@ struct boundary_intersect
 					{
 						const real E = this_particle.kin_energy;
 						const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
+						real deposition_prob; // the probability of deposition according to a cross-section
 						
 						// Alman cross section 
 						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
@@ -185,7 +186,7 @@ struct boundary_intersect
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max
 
-						real deposition_prob; // the probability of deposition according to the Alman cross-section
+						
 
 						if (this_particle.kin_energy <= E_TH)
 						{
