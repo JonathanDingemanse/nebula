@@ -276,11 +276,11 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		if(std::abs(delta_s_min - delta_S.y) < 0.00001 && delta_s_min != delta_S.y)
 		{
-			std::clog << "\n" << (delta_s_min - delta_S.y)*10000;
+			std::clog << "\n" << (delta_s_min - delta_S.y)*100000;
 		}
 		else if (std::abs(delta_s_min - delta_S.z) < 0.00001 && delta_s_min != delta_S.z)
 		{
-			std::clog << "\n" << (delta_s_min - delta_S.z) * 10000 ;
+			std::clog << "\n" << (delta_s_min - delta_S.z) * 100000;
 		}
 		
 		
