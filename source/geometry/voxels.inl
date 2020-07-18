@@ -498,9 +498,9 @@ void voxels<gpu_flag>::deposit(vec3 position, vec3 normal, int material, int PE_
 	{
 		pos = position / _voxel_size - 0.1 * normal;
 
-		int k = (int)pos.x;
-		int l = (int)pos.y;
-		int m = (int)pos.z;
+		k = (int)pos.x;
+		l = (int)pos.y;
+		m = (int)pos.z;
 	}
 
 	_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) = material;
