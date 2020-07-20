@@ -182,7 +182,7 @@ struct boundary_intersect
 						+ s * last_triangle_normal * cos_theta;
 				}
 
-				this_particle.kin_energy += dU;
+				
 				
 				// update the current material index and EXIT.
 								
@@ -273,6 +273,7 @@ struct boundary_intersect
 						}
 					}
 				}
+				this_particle.kin_energy += dU;
 				
 				particle_mgr[particle_idx] = this_particle;
 				return;
