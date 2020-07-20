@@ -217,21 +217,21 @@ int main(int argc, char** argv)
 		threads.push_back(std::thread(sim_loop, random_generator()));
 
 	// Progress indicator
-	unsigned long long pgpto = 0; // for testing purposes only
+	//unsigned long long pgpto = 0; // for testing purposes only
 	for (;;)
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		auto primaries_to_go = pool.get_primaries_to_go();
-		if(pgpto == primaries_to_go && pgpto != 0)
+		/*if(pgpto == primaries_to_go && pgpto != 0)
 		{
 			std::clog << "Hallo ik ben vastgelopen :( ";
 			//threads.push_back(std::thread(sim_loop, random_generator()));
-		}
+		}*/
 		std::clog << " \rProgress "
 			<< std::fixed << std::setprecision(2) << 100 * (1 - ((double)primaries_to_go / primaries.size())) << "%";
 		if (primaries_to_go == 0)
 			break;
-		pgpto = primaries_to_go;
+		//pgpto = primaries_to_go;
 	}
 	timer.stop("Simulation");
 
