@@ -271,7 +271,7 @@ struct boundary_intersect
 							if(this_particle.kin_energy < 0)
 							{
 								particle_mgr.terminate(particle_idx);
-								std::clog << "a particle with negative E \n "
+								std::clog << "a particle with negative E \n ";
 							}
 
 							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is not terminated anymore :)
