@@ -217,7 +217,7 @@ int main(int argc, char** argv)
 		threads.push_back(std::thread(sim_loop, random_generator()));
 
 	// Progress indicator
-	int pgpto = 0; // for testing purposes only
+	unsigned long long pgpto = 0; // for testing purposes only
 	for (;;)
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(1));
