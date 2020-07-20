@@ -188,15 +188,16 @@ struct boundary_intersect
 								
 				particle_mgr.set_material_index(particle_idx, material_idx_out);
 
-				if(material_idx_out == material_manager::VACUUM)
+				/*if(material_idx_out == material_manager::VACUUM)
 				{
 					particle_mgr.set_species(particle_idx, 3); // VE
-				}
+				}*/
 
 				if (deposition)
 				{
 					// deposit a voxel of material 0
-
+					
+					
 					if (material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
 					{
 						const real E = this_particle.kin_energy;
