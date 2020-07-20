@@ -128,7 +128,7 @@ private:
 	std::vector<int> _tag_grid; // .. with PE tags
 	std::vector<real> _e_grid; // .. with dissociation energies
 	//std::vector<real> _dz_grid;  // .. with dz's
-	std::vector<real> _species_grid;  // .. with electron species 
+	std::vector<int> _species_grid;  // .. with electron species 
 	
 	real _voxel_size; // voxel size in nm
 	int _size_x; // simulation domain size in x direction in voxels

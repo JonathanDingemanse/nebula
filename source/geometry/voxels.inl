@@ -21,11 +21,11 @@ inline voxels<gpu_flag>::voxels(real voxel_size, vec3 shape, std::vector<int> in
 	const vec3 m = _AABB_max - _AABB_min;
 	_max_extent = magnitude(m);
 
-	_mat_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
-	_tag_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
-	_e_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_mat_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
+	_tag_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
+	_e_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
 	//_dz_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
-	_species_grid.resize(int(shape.x) * int(shape.y) * int(shape.z), 0);
+	_species_grid.resize(static_cast<int>(shape.x) * static_cast<int>(shape.y) * static_cast<int>(shape.z), 0);
 
 		if (initial_geometry.size() != _size_x * _size_y * _size_z)
 		{
