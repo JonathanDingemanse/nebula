@@ -266,13 +266,7 @@ struct boundary_intersect
 
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
-							this_particle.kin_energy -= dissociation_energy;
-
-							if(this_particle.kin_energy < 0)
-							{
-								particle_mgr.terminate(particle_idx);
-								std::clog << "a particle with negative E \n ";
-							}
+							//this_particle.kin_energy -= dissociation_energy;
 
 							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is not terminated anymore :)
 
