@@ -274,7 +274,7 @@ struct boundary_intersect
 						}
 					}
 				}
-				//this_particle.kin_energy += dU;
+				this_particle.kin_energy += dU;
 				
 				particle_mgr[particle_idx] = this_particle;
 				return;
