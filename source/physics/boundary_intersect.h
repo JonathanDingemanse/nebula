@@ -255,7 +255,7 @@ struct boundary_intersect
 					
 				}
 				//this_particle.kin_energy += dU / 2;
-				this_particle.kin_energy += dU;
+				
 
 				if (interface_refraction)
 				{
@@ -264,6 +264,8 @@ struct boundary_intersect
 					this_particle.dir = (normalised_dir - last_triangle_normal * cos_theta)
 						+ s * last_triangle_normal * cos_theta;
 				}
+
+				this_particle.kin_energy += dU;
 				
 				// update the current material index and EXIT.
 								
