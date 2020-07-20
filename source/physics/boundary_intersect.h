@@ -170,28 +170,51 @@ struct boundary_intersect
 				// if there is transmission, then adjust the kinetic energy,
 				
 				
+				
+				//this_particle.kin_energy += dU / 2;
+				
+
+				if (interface_refraction)
+				{
+					// determine the angle of refraction
+					// see thesis T.V. Eq. 3.139
+					this_particle.dir = (normalised_dir - last_triangle_normal * cos_theta)
+						+ s * last_triangle_normal * cos_theta;
+				}
+
+				this_particle.kin_energy += dU;
+				
+				// update the current material index and EXIT.
+								
+				particle_mgr.set_material_index(particle_idx, material_idx_out);
+
+				if(material_idx_out == material_manager::VACUUM)
+				{
+					particle_mgr.set_species(particle_idx, 3); // VE
+				}
+
 				if (deposition)
 				{
 					// deposit a voxel of material 0
 
-					if(material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
+					if (material_idx_in == material_manager::VACUUM || material_idx_out == material_manager::VACUUM)
 					{
 						const real E = this_particle.kin_energy;
 						const real dissociation_energy = 3.5; // The energy that an electron looses when dissociating an precursor molecule.
 						real deposition_prob; // the probability of deposition according to a cross-section
-						
+
 						// Alman cross section 
 						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
 						const real E_MAX = 18; // maximum dissosiation cross - section energy in eV
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max
 
-						
+
 
 						if (this_particle.kin_energy <= E_TH)
 						{
 							deposition_prob = 0;
-						}	
+						}
 						else if (this_particle.kin_energy < E_MAX)
 						{
 							deposition_prob = SIGMA_MAX * (1 - ((E_MAX - this_particle.kin_energy) / std::pow(E_MAX - E_TH, 2)) );
@@ -223,10 +246,10 @@ struct boundary_intersect
 						}
 						else
 						{
-							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow( (1 - 1 / E),2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
+							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow((1 - 1 / E), 2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
 						}
-						
-						if(true /*rng.unit() < deposition_prob*/)
+
+						if (rng.unit() < deposition_prob)
 						{
 							/*vec3 dep_pos;
 							if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
@@ -237,43 +260,17 @@ struct boundary_intersect
 							{
 								dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
 							}*/
-							
+
 							//std::clog <<  (this_particle.pos.x/0.3) << "   " << this_particle.pos.y/0.3 << "   " << this_particle.pos.z/0.3 << "   " << voxel_side;
- 
+
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							this_particle.kin_energy -= dissociation_energy;
-							
+
 							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is not terminated anymore :)
-							
-						} 
-						
-						
+
+						}
 					}
-
-					
-					
-				}
-				//this_particle.kin_energy += dU / 2;
-				
-
-				if (interface_refraction)
-				{
-					// determine the angle of refraction
-					// see thesis T.V. Eq. 3.139
-					this_particle.dir = (normalised_dir - last_triangle_normal * cos_theta)
-						+ s * last_triangle_normal * cos_theta;
-				}
-
-				this_particle.kin_energy += dU;
-				
-				// update the current material index and EXIT.
-								
-				particle_mgr.set_material_index(particle_idx, material_idx_out);
-
-				if(material_idx_out == material_manager::VACUUM)
-				{
-					particle_mgr.set_species(particle_idx, 3); // VE
 				}
 				
 				particle_mgr[particle_idx] = this_particle;
