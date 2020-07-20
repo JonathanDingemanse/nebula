@@ -168,7 +168,7 @@ struct boundary_intersect
 			if (rng.unit() < T)
 			{
 				// if there is transmission, then adjust the kinetic energy,
-				this_particle.kin_energy += dU;
+				
 				
 				if (deposition)
 				{
@@ -255,6 +255,7 @@ struct boundary_intersect
 					
 				}
 				//this_particle.kin_energy += dU / 2;
+				this_particle.kin_energy += dU;
 
 				if (interface_refraction)
 				{
