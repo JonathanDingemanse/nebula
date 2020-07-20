@@ -188,10 +188,10 @@ struct boundary_intersect
 								
 				particle_mgr.set_material_index(particle_idx, material_idx_out);
 
-				/*if(material_idx_out == material_manager::VACUUM)
+				if(material_idx_out == material_manager::VACUUM)
 				{
 					particle_mgr.set_species(particle_idx, 3); // VE
-				}*/
+				}
 
 				if (deposition)
 				{
@@ -267,6 +267,12 @@ struct boundary_intersect
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							this_particle.kin_energy -= dissociation_energy;
+
+							if(this_particle.kin_energy < 0)
+							{
+								particle_mgr.terminate(particle_idx);
+								std::clog << "a particle with negative E \n "
+							}
 
 							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is not terminated anymore :)
 
