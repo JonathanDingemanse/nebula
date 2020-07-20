@@ -238,7 +238,7 @@ struct boundary_intersect
 								dep_pos = 0.1 * last_triangle_normal + this_particle.pos; // deposition position
 							}*/
 							
-							std::clog <<  (this_particle.pos.x/0.3) << "   " << this_particle.pos.y/0.3 << "   " << this_particle.pos.z/0.3 << "   " << voxel_side;
+							//std::clog <<  (this_particle.pos.x/0.3) << "   " << this_particle.pos.y/0.3 << "   " << this_particle.pos.z/0.3 << "   " << voxel_side;
  
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 

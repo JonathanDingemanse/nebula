@@ -353,7 +353,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		
 		if (new_mat != start_mat) { // if thcere is een intersection, return the intersection event
 
-			std::clog << "\r" << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "    " << _mat_grid[k + l * _size_x + (m-1) * _size_x * _size_y] << " " << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << " " << _mat_grid[k + l * _size_x + (m + 1) * _size_x * _size_y];
+			//std::clog << "\r" << "intersection from " << start_mat << " to " << new_mat << " at " << k << " " << l << " " << m << "    " << _mat_grid[k + l * _size_x + (m-1) * _size_x * _size_y] << " " << _mat_grid[k + l * _size_x + m * _size_x * _size_y] << " " << _mat_grid[k + l * _size_x + (m + 1) * _size_x * _size_y];
 			//std::clog << "material at 100 100 299: " << _mat_grid.at(100 + 100 * _size_x + 299 * _size_x * _size_y) << "\n";
 
 			
@@ -464,7 +464,7 @@ PHYSICS void voxels<gpu_flag>::set_material(vec3 position, int material, int PE_
 
 	if(_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
 	{
-		std::clog << "\n deposition inside material:  " << position.z / _voxel_size;
+		//std::clog << "\n deposition inside material:  " << position.z / _voxel_size;
 		return;
 	}
 	
@@ -511,7 +511,7 @@ void voxels<gpu_flag>::deposit(vec3 position, vec3 normal, int material, int PE_
 	if (_mat_grid.at(k + l * _size_x + m * _size_x * _size_y) != -123)
 	{
 		//std::clog << "\n deposition inside material:  " << _tag_grid.at(k + l * _size_x + m * _size_x * _size_y) << "   " << PE_tag;
-		std::clog << "\n";
+		//std::clog << "\n";
 		return;
 	}
 
