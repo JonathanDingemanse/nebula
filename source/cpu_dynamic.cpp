@@ -225,6 +225,8 @@ int main(int argc, char** argv)
 		if(pgpto == primaries_to_go && pgpto != 0)
 		{
 			std::clog << "Hallo ik ben vastgelopen :( ";
+			for (auto& t : threads)
+				t.join();
 			threads.push_back(std::thread(sim_loop, random_generator()));
 		}
 		std::clog << " \rProgress "
