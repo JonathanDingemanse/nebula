@@ -302,10 +302,10 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 		{
 		case 0: // intersection with x-plane
 			dx_sgn = dx / std::abs(dx); // determine sign of dx
-			k = (int)(new_pos.x + 0.1 * dx_sgn); // calculate the indices by flooring the new position plus a
+			k = static_cast<int>(new_pos.x + 0.1 * dx_sgn); // calculate the indices by flooring the new position plus a
 			// little inward 
-			l = (int)(new_pos.y);
-			m = (int)(new_pos.z);
+			l = static_cast<int>(new_pos.y);
+			m = static_cast<int>(new_pos.z);
 			
 			if (k >= _size_x || k < 0)
 			{
@@ -315,9 +315,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		case 1: // intersection with y-plane
 			dy_sgn =  dy / std::abs(dy);
-			k = (int)(new_pos.x);
-			l = (int)(new_pos.y + 0.1 * dy_sgn);
-			m = (int)(new_pos.z);
+			k = static_cast<int>(new_pos.x);
+			l = static_cast<int>(new_pos.y + 0.1 * dy_sgn);
+			m = static_cast<int>(new_pos.z);
 			
 			if (l >= _size_y || l < 0)
 			{
@@ -327,9 +327,9 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 
 		default: // intersection with z-plane
 			dz_sgn = dz / std::abs(dz);
-			k = (int)(new_pos.x);
-			l = (int)(new_pos.y);
-			m = (int)(new_pos.z + 0.1 *dz_sgn);
+			k = static_cast<int>(new_pos.x);
+			l = static_cast<int>(new_pos.y);
+			m = static_cast<int>(new_pos.z + 0.1 *dz_sgn);
 
 			if(m >= _size_z || m < 0)
 			{
