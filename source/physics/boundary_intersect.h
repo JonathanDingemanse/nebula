@@ -25,9 +25,6 @@ struct boundary_intersect
 	 * \brief Print diagnostic info
 	 */
 	nbl::geometry::voxels<false>* geometry;
-
-	vec3 pos_prev;
-	int it_num; 
 	
 	static void print_info(std::ostream& stream)
 	{
@@ -62,17 +59,6 @@ struct boundary_intersect
 		// Get particle direction, normal of the intersected triangle
 		auto normalised_dir = normalised(this_particle.dir);
 		vec3 last_triangle_normal;
-
-		if (this_particle.pos.x - pos_prev.x < 0.000001 )
-		{
-			particle_mgr.terminate(particle_idx);
-			std::clog << "terminated a particle";
-		}
-		else
-		{
-			pos_prev = this_particle.pos;
-		}
-
 		
 			// determine the normal of the voxel side using its number in range (1..6)
 		switch (voxel_side) 
