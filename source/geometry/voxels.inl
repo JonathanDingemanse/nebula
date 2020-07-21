@@ -357,7 +357,7 @@ PHYSICS intersect_event voxels<gpu_flag>::propagate(vec3 start, vec3 direction, 
 			//std::clog << "material at 100 100 299: " << _mat_grid.at(100 + 100 * _size_x + 299 * _size_x * _size_y) << "\n";
 
 			
-			evt.isect_distance = (delta_s_min + 0.001) * _voxel_size; // set the distance to the intersection
+			evt.isect_distance = (delta_s_min + 0.005) * _voxel_size; // set the distance to the intersection
 
 			// Determine voxel side
 			int	voxel_side;
