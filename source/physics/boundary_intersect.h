@@ -190,6 +190,8 @@ struct boundary_intersect
 					particle_mgr.set_species(particle_idx, 3); // VE
 				}
 
+				this_particle.kin_energy += dU / 2;
+
 				if (deposition)
 				{
 					// deposit a voxel of material 0
@@ -263,15 +265,15 @@ struct boundary_intersect
 
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
-							//this_particle.kin_energy -= dissociation_energy;
-							dU -= dissociation_energy;
+							this_particle.kin_energy -= dissociation_energy;
+							//dU -= dissociation_energy;
 
 							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated 
 
 						}
 					}
 				}
-				this_particle.kin_energy += dU;
+				this_particle.kin_energy += dU/2;
 				
 				particle_mgr[particle_idx] = this_particle;
 				return;
