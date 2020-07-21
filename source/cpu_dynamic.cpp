@@ -197,8 +197,8 @@ int main(int argc, char** argv)
 			d.flush_detected([&buff,&pixels](particle p, uint32_t t)
 			{
 				buff.add(std::array<float, 7>{
-					p.pos.x, p.pos.y, p.pos.z,
-					p.dir.x, p.dir.y, p.dir.z, p.kin_energy});
+					static_cast<float>(p.pos.x), static_cast<float>(p.pos.y), static_cast<float>(p.pos.z),
+						static_cast<float>(p.dir.x), static_cast<float>(p.dir.y), static_cast<float>(p.dir.z), static_cast<float>(p.kin_energy)});
 				buff.add(std::array<int, 2>{
 					pixels[t].x, pixels[t].y});
 			});

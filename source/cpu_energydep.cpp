@@ -197,8 +197,8 @@ int main(int argc, char** argv)
 			d.simulate_to_end([&deposit_buff, &pixels](particle const & before, particle const & after, uint32_t tag)
 			{
 				deposit_buff.add(std::array<float, 5>{
-					after.pos.x, after.pos.y, after.pos.z,
-					before.kin_energy, before.kin_energy - after.kin_energy});
+					static_cast<float>(after.pos.x), static_cast<float>(after.pos.y), static_cast<float>(after.pos.z),
+						static_cast<float>(before.kin_energy), static_cast<float>(before.kin_energy - after.kin_energy)});
 				deposit_buff.add(std::array<int, 2>{
 					pixels[tag].x, pixels[tag].y});
 			});
@@ -207,8 +207,8 @@ int main(int argc, char** argv)
 			d.flush_detected([&detect_buff, &pixels](particle const & p, uint32_t t)
 			{
 				detect_buff.add(std::array<float, 7>{
-					p.pos.x, p.pos.y, p.pos.z,
-					p.dir.x, p.dir.y, p.dir.z, p.kin_energy});
+					static_cast<float>(p.pos.x), static_cast<float>(p.pos.y), static_cast<float>(p.pos.z),
+					static_cast<float>(p.dir.x), static_cast<float>(p.dir.y), static_cast<float>(p.dir.z), static_cast<float>(p.kin_energy)});
 				detect_buff.add(std::array<int, 2>{
 					pixels[t].x, pixels[t].y});
 			});
