@@ -63,12 +63,15 @@ struct boundary_intersect
 		auto normalised_dir = normalised(this_particle.dir);
 		vec3 last_triangle_normal;
 
-		if (this_particle.pos.x == pos_prev.x && it_num > 1)
+		if (this_particle.pos.x - pos_prev.x < 0.000001 )
 		{
 			particle_mgr.terminate(particle_idx);
 			std::clog << "terminated a particle";
 		}
-		std::clog << it_num << "\n";
+		else
+		{
+			pos_prev = this_particle.pos;
+		}
 
 		
 			// determine the normal of the voxel side using its number in range (1..6)
