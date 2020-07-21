@@ -26,8 +26,8 @@ struct boundary_intersect
 	 */
 	nbl::geometry::voxels<false>* geometry;
 
-	vec3 pos_prev = {0, 0, 0};
-	int it_num = 0; 
+	vec3 pos_prev;
+	int it_num; 
 	
 	static void print_info(std::ostream& stream)
 	{
