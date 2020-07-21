@@ -10,7 +10,7 @@
  *
  * Set to 0 for single-precision and to 1 for double-precision calculations.
  */
-#define USE_DOUBLE 0
+#define USE_DOUBLE 1
 
 // Include relevant headers
 #include <cstdint>
