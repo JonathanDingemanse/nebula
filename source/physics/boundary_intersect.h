@@ -267,9 +267,9 @@ struct boundary_intersect
 							geometry->deposit(this_particle.pos, last_triangle_normal, 0, particle_mgr.get_primary_tag(particle_idx), this_particle.kin_energy, particle_mgr.get_species(particle_idx));
 
 							//this_particle.kin_energy -= dissociation_energy;
-							//dU -= dissociation_energy;
+							dU -= dissociation_energy;
 
-							particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated 
+							//particle_mgr.terminate(particle_idx); // After a deposition, the electron is terminated 
 
 						}
 					}
