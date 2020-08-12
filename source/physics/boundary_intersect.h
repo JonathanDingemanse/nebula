@@ -239,7 +239,7 @@ struct boundary_intersect
 						}*/
 
 						// Winters cross section
-						const real E_MAX_w = 100;
+						/*const real E_MAX_w = 100;
 						if(this_particle.kin_energy < 36.8)
 						{
 							deposition_prob = 0;
@@ -247,10 +247,10 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = 100*std::log(this_particle.kin_energy / 36.7879) / this_particle.kin_energy;
-						}
+						}*/
 
 						// Smith cross section
-						/*if (E < 7)
+						if (E < 7)
 						{
 							deposition_prob = 0;
 						}
@@ -261,7 +261,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow((1 - 1 / E), 2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
-						}*/
+						}
 
 						if (rng.unit() < deposition_prob)
 						{
