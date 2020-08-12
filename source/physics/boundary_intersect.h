@@ -201,7 +201,7 @@ struct boundary_intersect
 						real deposition_prob; // the probability of deposition according to a cross-section
 
 						// Alman cross section 
-						/*const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
+						const real E_TH = 3.5; // dissosiation threshold energy in eV(waarden uit(2008))
 						const real E_MAX = 18; // maximum dissosiation cross - section energy in eV
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max
@@ -219,7 +219,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = SIGMA_MAX * std::exp(-(this_particle.kin_energy - E_MAX) / LAMBDA_0);
-						}*/
+						}
 
 						// Winters cross section
 						/*const real E_MAX_w = 100;
@@ -233,7 +233,7 @@ struct boundary_intersect
 						}*/
 
 						// Smith cross section
-						if (E < 7)
+						/*if (E < 7)
 						{
 							deposition_prob = 0;
 						}
@@ -244,7 +244,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow((1 - 1 / E), 2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
-						}
+						}*/
 
 						if (rng.unit() < deposition_prob)
 						{
