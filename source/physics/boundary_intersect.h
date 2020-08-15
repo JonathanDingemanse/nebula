@@ -211,7 +211,7 @@ struct boundary_intersect
 
 
 
-						/*if (this_particle.kin_energy <= E_TH)
+						if (this_particle.kin_energy <= E_TH)
 						{
 							deposition_prob = 0;
 						}
@@ -222,7 +222,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = SIGMA_MAX * std::exp(-(this_particle.kin_energy - E_MAX) / LAMBDA_0);
-						}*/
+						}
 
 						// Jonathan cs
 						/*if (this_particle.kin_energy <= E_TH)
@@ -250,7 +250,7 @@ struct boundary_intersect
 						}*/
 
 						// Smith cross section
-						if (E < 7)
+						/*if (E < 7)
 						{
 							deposition_prob = 0;
 						}
@@ -263,7 +263,7 @@ struct boundary_intersect
 							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow((1 - 1 / E), 2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
 						}
 
-						if (rng.unit() < deposition_prob)
+						if (rng.unit() < deposition_prob)*/
 						{
 							/*vec3 dep_pos;
 							if (material_idx_in == material_manager::VACUUM) // electron enters material from vacuum
