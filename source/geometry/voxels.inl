@@ -48,7 +48,7 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 	const int SIZE_Z = 900; // vertical size in voxels
 	const real SIM_DEPTH = 500; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
 
-	const int SAMPLE_HEIGHT = 500; // height of the sample (length between the sample and the top of the simulation domain) in voxels
+	const int SAMPLE_HEIGHT = 500; // height of the sample (length between the sample and the top of the simulation domain, in vacuum) in voxels
 	
 	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
