@@ -43,8 +43,8 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 {
 	const real VOXEL_SIZE = 0.3; // voxel size in nanometers (0.27 nm is appr. one atom of Si)
 
-	const int SIZE_X = 101; // horizontal size in the x direction in voxels
-	const int SIZE_Y = 101; // horizontal size in the y direction in voxels
+	const int SIZE_X = 201; // horizontal size in the x direction in voxels
+	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
 	const int SIZE_Z = 201; // vertical size in voxels
 	const real SIM_DEPTH = 500; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
 

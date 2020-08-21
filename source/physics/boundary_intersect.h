@@ -263,7 +263,7 @@ struct boundary_intersect
 							deposition_prob = (-16540 * (1 - 1 / E) + 15970 * std::pow((1 - 1 / E), 2) + 108.8 * std::log(E) + 5885 * std::log(E) / E) / E;
 						}*/
 
-						deposition_prob = 0;
+						deposition_prob = 0; // for sanity check only
 
 						if (rng.unit() < deposition_prob)
 						{
