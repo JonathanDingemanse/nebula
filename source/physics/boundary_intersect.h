@@ -185,10 +185,10 @@ struct boundary_intersect
 								
 				particle_mgr.set_material_index(particle_idx, material_idx_out);
 
-				if (material_idx_out == material_manager::VACUUM)
+				/*if (material_idx_out == material_manager::VACUUM)
 				{
 					this_particle.kin_energy += dU;
-				}
+				}*/
 
 				//this_particle.kin_energy += dU / 2;
 
@@ -294,8 +294,10 @@ struct boundary_intersect
 					particle_mgr.set_species(particle_idx, 3); // VE
 				}
 				else{
-					this_particle.kin_energy += dU;
+					
 				}
+
+				this_particle.kin_energy += dU;
 				
 				particle_mgr[particle_idx] = this_particle;
 				return;
