@@ -185,12 +185,12 @@ struct boundary_intersect
 								
 				particle_mgr.set_material_index(particle_idx, material_idx_out);
 
-				/*if (material_idx_out == material_manager::VACUUM)
+				if (material_idx_out == material_manager::VACUUM)
 				{
 					this_particle.kin_energy += dU;
-				}*/
+				}
 
-				this_particle.kin_energy += dU / 2;
+				//this_particle.kin_energy += dU / 2;
 
 				if (deposition)
 				{
@@ -209,9 +209,9 @@ struct boundary_intersect
 						const real LAMBDA_0 = 77; // lambda_0 in eV
 						const real SIGMA_MAX = 1; // sigma_max
 
+						// below are 4 dissosiation cross sections that can be switched on and off using multi line commenting
 
-
-						if (this_particle.kin_energy <= E_TH)
+						/*if (this_particle.kin_energy <= E_TH) 
 						{
 							deposition_prob = 0;
 						}
@@ -222,10 +222,10 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = SIGMA_MAX * std::exp(-(this_particle.kin_energy - E_MAX) / LAMBDA_0);
-						}
+						}*/
 
-						// Jonathan cs
-						/*if (this_particle.kin_energy <= E_TH)
+						// Alman-Winters cs
+						if (this_particle.kin_energy <= E_TH)
 						{
 							deposition_prob = 0;
 						}
@@ -236,7 +236,7 @@ struct boundary_intersect
 						else
 						{
 							deposition_prob = E_MAX*std::log(this_particle.kin_energy / 6.621829941) / this_particle.kin_energy;
-						}*/
+						}
 
 						// Winters cross section
 						/*const real E_MAX_w = 100;
@@ -287,15 +287,15 @@ struct boundary_intersect
 						}
 					}
 				}
-				this_particle.kin_energy += dU / 2;
+				//this_particle.kin_energy += dU / 2;
 
 				if (material_idx_out == material_manager::VACUUM)
 				{
 					particle_mgr.set_species(particle_idx, 3); // VE
 				}
-				/*else{
+				else{
 					this_particle.kin_energy += dU;
-				}*/
+				}
 				
 				particle_mgr[particle_idx] = this_particle;
 				return;
