@@ -43,12 +43,12 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 {
 	const real VOXEL_SIZE = 0.3; // voxel size in nanometers (0.27 nm is appr. one atom of Si)
 
-	const int SIZE_X = 201; // horizontal size in the x direction in voxels
-	const int SIZE_Y = 201; // horizontal size in the y direction in voxels
-	const int SIZE_Z = 900; // vertical size in voxels
+	const int SIZE_X = 101; // horizontal size in the x direction in voxels
+	const int SIZE_Y = 101; // horizontal size in the y direction in voxels
+	const int SIZE_Z = 201; // vertical size in voxels
 	const real SIM_DEPTH = 500; // simulation depth under the voxels at z < 0 for SEM bulk samples in nm
 
-	const int SAMPLE_HEIGHT = 500; // height of the sample (length between the sample and the top of the simulation domain, in vacuum) in voxels
+	const int SAMPLE_HEIGHT = 101; // height of the sample (length between the sample and the top of the simulation domain, in vacuum) in voxels
 	
 	vec3 shape = { SIZE_X, SIZE_Y, SIZE_Z };
 	
@@ -75,9 +75,9 @@ CPU voxels<gpu_flag> voxels<gpu_flag>::create(std::vector<triangle> const & tria
 
 	// Add layers of detectors for testing
 	
-	/*for (int i = 0; i < SIZE_X; i++) {
+	for (int i = 0; i < SIZE_X; i++) { // add detector layer
 		for (int j = 0; j < SIZE_Y; j++) {
-			ini_geom.at(i + j * SIZE_X + (SAMPLE_HEIGHT + 8) * SIZE_X * SIZE_Y) = -126;
+			ini_geom.at(i + j * SIZE_X + ) = -126;
 		}
 	}
 	
